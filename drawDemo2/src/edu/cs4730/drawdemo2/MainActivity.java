@@ -1,43 +1,25 @@
 package edu.cs4730.drawdemo2;
 
 import android.os.Bundle;
-import android.app.Activity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v4.app.FragmentActivity;
+
 
 /*
- * This demos a custom view.  There is almost nothing in this activity
- * except for a call to the customview to reset the grid from a menu item.
+ *  this does nothing except get the fragment
+ *  see fragment code for what this example does.
  * 
  */
 
 
-public class MainActivity extends Activity {
-
-	DrawView dv;
+public class MainActivity extends FragmentActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		dv = (DrawView)findViewById(R.id.dv1);
-		
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.reset:
-			dv.clearmaze();
-			return true;
-		}
-		return false;
+		if (savedInstanceState == null) {
+			getSupportFragmentManager().beginTransaction()
+			.add(R.id.container, new Draw2_Fragment()).commit();
+			}
 	}
 }

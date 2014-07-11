@@ -164,6 +164,11 @@ public class DrawView extends View {
           }
           return true;
         }
+        
+        /* 
+         * If outside the lines, then popup a dialog and ask about reseting the board.
+         * Interestingly, nothing is deprecated in the view
+         */
         Dialog dialog = null;
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(myContext);
