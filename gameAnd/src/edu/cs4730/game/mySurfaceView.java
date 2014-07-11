@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.Vector;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -133,8 +134,8 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 	}
 	
 	/*
-	 * (non-Javadoc)
-	 * @see net.rim.device.api.ui.Screen#touchEvent(net.rim.device.api.ui.TouchEvent)
+	 * touch event to deal with the left, right, and fire "button"
+	 * 
 	 */
 	@Override public boolean onTouchEvent(MotionEvent event) {
 		int action = event.getAction();
@@ -163,6 +164,9 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 	/*
 	 * (non-Javadoc)
 	 * @see android.view.View#onKeyDown(int, android.view.KeyEvent)
+	 * 
+	 * use can use keys as well, q is left, p is right
+	 * space key is fire button.
 	 */
 	@Override 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -276,6 +280,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 		public void setRunning(boolean run) {
 			_run = run;
 		}
+		@SuppressLint("WrongCall")
 		@Override
 		public void run() {
 			Canvas c;
@@ -290,7 +295,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 				try {
 					c = _surfaceHolder.lockCanvas(null);
 					synchronized (_surfaceHolder) {
-						_mySurfaceView.onDraw(c);
+						_mySurfaceView.onDraw(c);  //lint error, but not sure why.
 					}
 				} finally {
 					// do this in a finally so that if an exception is thrown

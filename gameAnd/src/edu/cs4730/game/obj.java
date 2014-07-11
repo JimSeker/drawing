@@ -6,8 +6,7 @@ import android.graphics.Rect;
 /*
  * obj.java
  *
- * © <your company here>, 2003-2008
- * Confidential and proprietary.
+ *  model class to hold all the information about the aliens, ship, and bullets.
  */
 
 class obj {
