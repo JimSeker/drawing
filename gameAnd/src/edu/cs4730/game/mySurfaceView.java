@@ -51,12 +51,12 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 		alien2Bmp = BitmapFactory.decodeResource(getResources(),  R.drawable.alien2 );
 		shotBmp = BitmapFactory.decodeResource(getResources(),  R.drawable.shot );
 		bg = BitmapFactory.decodeResource(getResources(),  R.drawable.bg );
-		left =0; right = 360;
+		left =0; right = 320;
 		top =80; bottom =400;
 		
-		leftbtn = 120; //based on the background image
-		firebtn = 240;
-		rightbtn = 360;
+		leftbtn = 107; //based on the background image
+		firebtn = 204;
+		rightbtn = 320;
 		//now deal with the density ie dpi for the screen size.  All above of this assumes mdpi (default 1:1), except
 		//well the new phones and stuff are xxdvpi (which android says won't happen...), xdpi, etc.  So need scaling
 		//DisplayMetrics metrics = new DisplayMetrics();  ?
