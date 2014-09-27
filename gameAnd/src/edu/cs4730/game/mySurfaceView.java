@@ -4,6 +4,8 @@ import java.util.Random;
 import java.util.Vector;
 
 
+
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,6 +13,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
@@ -25,6 +29,8 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 	int maxAliens = 5, maxShots=3;
 	int height, width;
 	int left, right, top, bottom;
+	int leftbtn, firebtn, rightbtn;
+	int alienmove=1, shotmove=1;
 	int score=0;
 	int moveship =0; boolean tofire = false;
 	Bitmap shipBmp, alien1Bmp, alien2Bmp, shotBmp,bg;
@@ -32,13 +38,14 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 	obj ship;
 	//Vector shots, aliens;
 	Vector<obj> shots,aliens;
-	
+	float scale;
 	Random myRandom;
 	char[] chars = {'q','p',' '};
 
 	public mySurfaceView(Context context) {
 		super(context);
 
+		//BitmapFactory.Options() has methods to scale or not to scale.   
 		shipBmp = BitmapFactory.decodeResource(getResources(), R.drawable.ship);
 		alien1Bmp = BitmapFactory.decodeResource(getResources(),  R.drawable.alien );
 		alien2Bmp = BitmapFactory.decodeResource(getResources(),  R.drawable.alien2 );
@@ -46,16 +53,42 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 		bg = BitmapFactory.decodeResource(getResources(),  R.drawable.bg );
 		left =0; right = 360;
 		top =80; bottom =400;
+		
+		leftbtn = 120; //based on the background image
+		firebtn = 240;
+		rightbtn = 360;
+		//now deal with the density ie dpi for the screen size.  All above of this assumes mdpi (default 1:1), except
+		//well the new phones and stuff are xxdvpi (which android says won't happen...), xdpi, etc.  So need scaling
+		//DisplayMetrics metrics = new DisplayMetrics();  ?
+		//getWindowManager().getDefaultDisplay().getMetrics(metrics);  return value is wtf?  no doc's.
+		scale = getResources().getDisplayMetrics().density;  //this gives me the scale value for a mdpi baseline of 1.
+		right *= scale;
+		left *= scale; //currently zero, so this is pointless.
+		Log.v("setup", "right is " + right);
+		Log.v("Setup", "dpi is "+ scale);
+		top *= scale;
+		bottom *= scale;
+		leftbtn *= scale;
+		rightbtn *= scale;
+		firebtn *= scale;
+		shotmove *= scale;
+		alienmove *= scale;
+
 		setup();
 		
+		//red is not used, and it's color is blue.  why????
 		red = new Paint();
 		red.setColor(Color.BLUE);
 		red.setStyle(Paint.Style.FILL); 
+		//
 		black = new Paint();  //default is black
-		black.setStyle(Paint.Style.STROKE); 
+		//black.setStyle(Paint.Style.STROKE); 
+		black.setStyle(Paint.Style.FILL);
+		black.setTextSize(black.getTextSize()*scale);  //scale the font size too
 		myRandom = new Random();
 		getHolder().addCallback(this);
 		thread = new myThread(getHolder(), this);
+		
 
 
 	}
@@ -70,11 +103,11 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 	@Override
 	public void onDraw(Canvas c) {
 		//System.out.println("w= "+ c.getWidth()+" h="+c.getHeight());
-		c.drawColor(Color.BLACK);
+		c.drawColor(Color.BLACK);  //entire screen black, then draw on the background.
 		//draw background
 		c.drawBitmap(bg, 0, 0, null);
 		//draw score
-		c.drawText("Score: "+score, 10, 10, black);
+		c.drawText("Score: "+score, 10, 10*scale, black);  //scale or change the text alignment to top,left in black.
 		//now add our stuff
 		//draw the ship
 		c.drawBitmap(shipBmp,ship.x, ship.y, null);
@@ -99,7 +132,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 			  }
 		}
 		if (gameover) {
-			c.drawText("GAME OVER", 100, 100,black);
+			c.drawText("GAME OVER", 100*scale, 100*scale,black);
 		}
 	}
 
@@ -146,13 +179,13 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
 			if (y>bottom) { //below playing area
-				if (x<120) { //left
-					moveship = -5;
+				if (x<leftbtn) { //left
+					moveship = -5;  //and yet this seems to be dpi independent, I think... why?
 					return true;
-				} else if (x<240) { //fire
+				} else if (x<firebtn) { //fire
 					tofire = true;
 					return true;
-				} else if (x<360) {
+				} else if (x<=rightbtn) {
 					moveship = 5;
 					return true;
 				}
@@ -173,7 +206,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 		char key = event.getMatch(chars);
 		System.out.println("Key is "+key);
 		if (key == 'q') {
-			moveship = -5;
+			moveship = -5;    //should I be scale ship movement too?  
 			return true;
 		} else if (key=='p') {
 			moveship = 5;
@@ -206,18 +239,18 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 			//move aliens and check for landing.
 			for(int i=0; i<aliens.size(); i++) {
 				temp = (obj)aliens.elementAt(i);
-				if (temp.tickU(3)) { //yes move the alien
+				if (temp.tickU(3)) { //yes move the alien   this kepts the alien from moving to fast.  likely to slow with scaleing.  fix? don't know.
 					//now direction 
 					if (temp.tick2U(15)) {  //choose a new direction
-						temp.dir = myRandom.nextInt(3) -1;
+						temp.dir = myRandom.nextInt(3) -1;  //-1, 0, or +1  for direction.
 					}
 					if (temp.x+ship.dir <=left  || temp.x+ship.dir>=right-alien1Bmp.getWidth())  { //don't move alien off edge of the board
 						temp.dir *=-1;
 					}
-					if (temp.y +1 +alien1Bmp.getHeight()>= bottom) {  //alien landed.  game over!
+					if (temp.y +alien1Bmp.getHeight()>= bottom) {  //alien landed.  game over!
 						gameover = true;
 					}
-				   temp.move(temp.dir, +1); 
+				   temp.move(temp.dir, +alienmove);   //alienmove is the 1* scale.
 				}
 			}
 			//add another alien?
@@ -233,12 +266,12 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             aliens.addElement(new obj(x,top,0,alien1Bmp.getWidth(), alien1Bmp.getHeight()));
 		}
 
-		//move shots
+		//move shots 
 		if (!shots.isEmpty()) {
 			for(int i=0; i<shots.size(); i++) {
 				temp = (obj)shots.elementAt(i);
-				if (temp.y-1 > top) {
-				   temp.move(0, -1); 
+				if (temp.y-shotmove > top) {
+				   temp.move(0, -shotmove);   //shotmove is the 1*scale.
 				} else {
 					//remove shot
 					temp.dead();
