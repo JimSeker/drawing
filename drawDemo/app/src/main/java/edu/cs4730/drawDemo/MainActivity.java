@@ -1,12 +1,15 @@
 package edu.cs4730.drawDemo;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+/*
+  * There is no interesting code here.  It's just the template.  See the Draw_Fragment code.
+ */
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
