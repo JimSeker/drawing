@@ -1,93 +1,106 @@
-package edu.cs4730.drawDemo;
+package edu.cs4730.drawdemo1;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
+
 
 /**
- * A simple {@link Fragment} subclass.
+ * This uses an animated clear button, instead of just clearing it.
+ *
  */
-public class Draw_Fragment extends Fragment {
-
+public class AnDrawFragment extends Fragment {
     ImageView theboardfield;
     Bitmap theboard;
     Canvas theboardc;
-    Button btnClear, btnAClear, btnNColor;
+    Button btnClear, btnNColor;
+    Spinner mySpinner;
+    int which = 1;
     final int boardsize = 480;
-    boolean isAnimation = false;
-    protected Handler handler;
     //for drawing
-    Rect myRec;
+    float firstx, firsty;
+    boolean first = true;
+    RectF myRecF = new RectF();
     Paint myColor;
     ColorList myColorList = new ColorList();
     Bitmap alien;
+
+    //for the animation.
+    boolean isAnimation = false;
+    protected Handler handler;
     //for the thread
     Thread myThread;
 
-
-    public Draw_Fragment() {
+    public AnDrawFragment() {
         // Required empty public constructor
-
-        //required if the fragment is adding menu items, otherwise it calls the menu methods.
-        setHasOptionsMenu(true);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View myView = inflater.inflate(R.layout.draw_fragment, container, false);
+        View myView = inflater.inflate(R.layout.fragment_andraw, container, false);
 
-
-        //Animated clear button, will start a thread to clear the image to white
-        btnAClear = (Button) myView.findViewById(R.id.button1);
-        btnAClear.setOnClickListener(new OnClickListener() {
+        //Simple clear button, reset the image to white.
+        btnClear = (Button) myView.findViewById(R.id.button2);
+        btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startThread();  //done to simply a few things.
             }
         });
 
-        //Simple clear button, reset the image to white.
-        btnClear = (Button) myView.findViewById(R.id.button2);
-        btnClear.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                theboardc.drawColor(Color.WHITE);  //background color for the board.
-                drawBmp();
-            }
-        });
-
         //changes to the next color in the list
         btnNColor = (Button) myView.findViewById(R.id.button3);
-        btnNColor.setOnClickListener(new OnClickListener() {
+        btnNColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myColorList.next();
                 myColor.setColor(myColorList.getNum());
+            }
+        });
+
+        //setup the spinner
+        String[] list = {"Point", "Line", "Rect", "Circle", "Arc", "Oval", "Pic", "Text"};
+        //first we will work on the spinner1 (which controls the seekbar)
+        mySpinner = (Spinner) myView.findViewById(R.id.spinner);
+        //create the ArrayAdapter of strings from my List.
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
+        //set the dropdown layout
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //finally set the adapter to the spinner
+        mySpinner.setAdapter(adapter);
+        //set the selected listener as well
+        mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                which = position;
+                first = true;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                which = 1; //point
+                first = true;
             }
         });
 
@@ -102,62 +115,156 @@ public class Draw_Fragment extends Fragment {
         theboardfield.setOnTouchListener(new myTouchListener());
 
         //For drawing
-        myRec = new Rect(0, 0, 10, 10);
+
         myColor = new Paint();  //default black
         myColor.setColor(myColorList.getNum());
         myColor.setStyle(Paint.Style.FILL);
+        myColor.setStrokeWidth(10);
+        myColor.setTextSize(myColor.getTextSize() * 4);
 
         //load a picture and draw it onto the screen.
         alien = BitmapFactory.decodeResource(getResources(), R.drawable.alien);
-        //draw it on the screen.
-        theboardc.drawBitmap(alien, null, new Rect(0, 0, 300, 300), myColor);
+
         //message handler for the animation.
         handler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == 0) { //redraw image
                     if (theboard != null && theboardfield != null) {
-                        drawBmp();
+                        refreshBmp();
                     }
                 }
                 return true;
             }
         });
-
+        //draw it on the screen.
+        //theboardc.drawBitmap(alien, null, new Rect(0, 0, 300, 300), myColor);
         return myView;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_frag, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case R.id.loadimage:
-                bmpload();
-                return true;
-            case R.id.saveimage:
-                bmpsave();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     /*
-     * simple method to set the board in the imageveiw and then cause it to redraw.
-     */
-    void drawBmp() {
+    * TouchListener will draw a square on the image where "touched".
+    * If doing an animated clear, it will return without doing anything.
+    */
+    class myTouchListener implements View.OnTouchListener {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+
+            //Don't draw if there is animation going on.
+            if (isAnimation) return true;  //but say we handled (ignored) the event.
+
+            //We just need the x and y position, to draw on the canvas
+            //so, retrieve the new x and y touch positions
+            if (event.getAction() == MotionEvent.ACTION_UP) { //fake it for tap.
+                drawBmp((int) event.getX(), (int) event.getY(), MotionEvent.ACTION_UP);
+
+            } else if (event.getAction() == MotionEvent.ACTION_MOVE) { //fake it for tap.
+
+                drawBmp((int) event.getX(), (int) event.getY(), MotionEvent.ACTION_MOVE);
+                return true;
+            }
+            return false;
+        }
+    }
+
+
+    void drawBmp(float x, float y, int eventcode) {
+        //"Point", "Line", "Rect", "Circle", "Arc", "Oval", "Pic", "Text"
+        switch (which) {
+            case 0:   //draw a point.
+                theboardc.drawColor(Color.WHITE);  //background color for the board.
+                theboardc.drawPoint(x, y, myColor);
+                break;
+            case 1: //line
+                if (first) { //store the point for later
+                    firstx = x;
+                    firsty = y;
+                    first = false;
+                } else {
+                    theboardc.drawColor(Color.WHITE);  //background color for the board.
+                    theboardc.drawLine(firstx, firsty, x, y, myColor);
+                    if (eventcode == MotionEvent.ACTION_UP)
+                        first = true;
+                }
+                break;
+            case 2: //rectangle
+                if (first) { //store the point for later
+                    myRecF.top = y;
+                    myRecF.left = x;
+
+                    first = false;
+                } else {
+
+                    myRecF.bottom = y;
+                    myRecF.right = x;
+                    theboardc.drawColor(Color.WHITE);  //background color for the board.
+                    theboardc.drawRect(myRecF, myColor);
+                    if (eventcode == MotionEvent.ACTION_UP)
+                        first = true;
+                }
+                break;
+            case 3: //circle
+                theboardc.drawColor(Color.WHITE);  //background color for the board.
+                theboardc.drawCircle(x, y, 20.0f, myColor);
+                break;
+            case 4: //arc
+                if (first) { //store the point for later
+                    myRecF.top = y;
+                    myRecF.left = x;
+
+                    first = false;
+                } else {
+
+                    myRecF.bottom = y;
+                    myRecF.right = x;
+                    theboardc.drawColor(Color.WHITE);  //background color for the board.
+                    theboardc.drawArc(myRecF, 0.0f, 45.0f, true, myColor);
+                    if (eventcode == MotionEvent.ACTION_UP)
+                        first = true;
+                }
+                break;
+            case 5: //oval
+                if (first) { //store the point for later
+                    myRecF.top = y;
+                    myRecF.left = x;
+
+                    first = false;
+                } else {
+
+                    myRecF.bottom = y;
+                    myRecF.right = x;
+                    theboardc.drawColor(Color.WHITE);  //background color for the board.
+                    theboardc.drawOval(myRecF, myColor);
+                    if (eventcode == MotionEvent.ACTION_UP)
+                        first = true;
+                }
+                break;
+            case 6: //"Pic"
+                theboardc.drawColor(Color.WHITE);  //background color for the board.
+                theboardc.drawBitmap(alien, x, y, myColor);
+                break;
+            case 7: // "Text"
+                theboardc.drawColor(Color.WHITE);  //background color for the board.
+                theboardc.drawText("Hi there", x, y, myColor);
+                break;
+            default:
+                Log.v("hi", "NOT working? " + which);
+
+
+        }
+
+        theboardfield.setImageBitmap(theboard);
+        theboardfield.invalidate();
+    }
+
+    void refreshBmp() {
         theboardfield.setImageBitmap(theboard);
         theboardfield.invalidate();
     }
 
     /* (non-Javadoc)
- * @see android.app.Activity#onPause()
- */
+  * @see android.app.Activity#onPause()
+  */
     public void onPause() {
         finish();
         super.onPause();
@@ -272,79 +379,6 @@ public class Draw_Fragment extends Fragment {
             myColor.setColor(myColorList.getNum());
             isAnimation = false;
         }
-    }
-
-
-    /*
-     * TouchListener will draw a square on the image where "touched".
-     * If doing an animated clear, it will return without doing anything.
-     */
-    class myTouchListener implements View.OnTouchListener {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-
-            //Don't draw if there is animation going on.
-            if (isAnimation) return true;  //but say we handled (ignored) the event.
-
-            //We just need the x and y position, to draw on the canvas
-            //so, retrieve the new x and y touch positions
-            int x = (int) event.getX();
-            int y = (int) event.getY();
-            //now draw on our canvas
-            myRec.set(x, y, x + 10, y + 10);
-            theboardc.drawRect(myRec, myColor);
-            drawBmp();
-            return true;
-        }
-    }
-
-    ;
-
-
-    /*
-     * If that is a stored file called, DrawDemo.png, then it will load it into the imageview.
-     */
-    void bmpload() {
-
-        DataInputStream in;
-        //file is located in the private data section of the app, instead of on the sdcard.
-        String filename = "DrawDemo.png";
-        Bitmap bmp = null;
-
-        try {
-            in = new DataInputStream(getActivity().openFileInput(filename));
-            bmp = BitmapFactory.decodeStream(in);
-            //theboard = bmp;  can't draw on screen anymore...!
-            theboardc.drawBitmap(bmp, 0, 0, null);
-            drawBmp();
-        } catch (FileNotFoundException e) {
-            Log.i("bmpload", "file not found");
-        }
-
-    }
-
-
-    /*
-     * Save the image drawn in a file called DrawDemo.png
-     */
-    void bmpsave() {
-        String filename = "DrawDemo.png";
-        DataOutputStream dos;
-        //store the image in the local data directory.
-        try {
-            dos = new DataOutputStream(getActivity().openFileOutput(filename, Context.MODE_PRIVATE));
-
-            // FileOutputStream out = new FileOutputStream();
-            if (theboard.compress(Bitmap.CompressFormat.PNG, 90, dos))
-                Log.i("bmpsave", "It worked");
-            else
-                Log.w("bmpsave", "Bmp save failed!");
-            dos.flush();
-            dos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
 }
