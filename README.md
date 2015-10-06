@@ -13,7 +13,7 @@ Android Drawing Examples
 
 
 <b>legacy</b><br>
-DrawDemo uses a canvas to draw on, then display via an imageview and  is no longer updated
+DrawDemo uses a canvas to draw on, then display via an imageview and  is no longer updated<BR>
 svtest is a very simple SurfaceView to draw and "animate" a moving box and is no longer updated.
 
 
