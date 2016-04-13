@@ -10,6 +10,7 @@ Android Drawing Examples
 
 <b>GameDemo</b> is a very simple space invaders like game using a surfaceview.
 
+<b>GraphicOverlayDemo</b> is an example of how to create a customview to draw on other views.
 
 
 <b>legacy</b><br>
