@@ -2,18 +2,12 @@ package edu.cs4730.game;
 
 import java.util.Random;
 import java.util.Vector;
-
-
-
-
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.KeyEvent;
@@ -101,7 +95,8 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
 	}
 	@Override
-	public void onDraw(Canvas c) {
+	public void draw(Canvas c) {
+		super.draw(c);
 		//System.out.println("w= "+ c.getWidth()+" h="+c.getHeight());
 		c.drawColor(Color.BLACK);  //entire screen black, then draw on the background.
 		//draw background
@@ -313,7 +308,6 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 		public void setRunning(boolean run) {
 			_run = run;
 		}
-		@SuppressLint("WrongCall")
 		@Override
 		public void run() {
 			Canvas c;
@@ -328,7 +322,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 				try {
 					c = _surfaceHolder.lockCanvas(null);
 					synchronized (_surfaceHolder) {
-						_mySurfaceView.onDraw(c);  //lint error, but not sure why.
+						_mySurfaceView.draw(c);  //lint error, but not sure why.
 					}
 				} finally {
 					// do this in a finally so that if an exception is thrown
@@ -341,7 +335,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 				try {
 					Thread.sleep(3);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}

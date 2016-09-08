@@ -151,8 +151,8 @@ public class DrawView extends View {
         if (y>= leftside && y<rightside &&
         	x>= leftside && x<rightside){
           y-=incr; x-=incr; //simplifies the math here.
-          cx = (int) x/incr;
-          cy = (int) y/incr;
+          cx =  x/incr;
+          cy = y/incr;
           if (cx <size && cy <size) {
              if (maze[cx][cy] == Color.BLACK) {
                 maze[cx][cy] = color;

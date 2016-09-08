@@ -282,7 +282,7 @@ public class AnDrawFragment extends Fragment {
                     myThread.join();
                 }
             } catch (InterruptedException e) {
-                ; //don't care.
+                e.printStackTrace();
             }
             myThread = null;
         }

@@ -57,7 +57,8 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     @Override
-    public void onDraw(Canvas c) {
+    public void draw(Canvas c) {
+        super.draw(c);
         c.drawColor(Color.WHITE);
         c.drawBitmap(alien, null, myRect, black);
 
@@ -136,7 +137,8 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 try {
                     c = _surfaceHolder.lockCanvas(null);
                     synchronized (_surfaceHolder) {
-                        _mySurfaceView.onDraw(c);
+                        //_mySurfaceView.onDraw(c);
+                        _mySurfaceView.draw(c);
                     }
                 } finally {
                     // do this in a finally so that if an exception is thrown
@@ -154,7 +156,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
+                    e.printStackTrace();
 
                 }
             }

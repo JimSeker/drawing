@@ -235,8 +235,10 @@ public class AsycDrawFragment extends Fragment {
     /* (non-Javadoc)
  * @see android.app.Activity#finish()
  */
+
     public void finish() {
        isAnimation = false;
+
     }
     /*
     * this is an thread, so it can run the "animated" clear button"

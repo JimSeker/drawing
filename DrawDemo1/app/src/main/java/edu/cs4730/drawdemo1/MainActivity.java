@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         };
         //To disable the icon for the drawer, change this to false
         //mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawerlayout.setDrawerListener(mDrawerToggle);
+        mDrawerlayout.addDrawerListener(mDrawerToggle);
 
         //this ia the support Navigation view.
         mNavigationView = (NavigationView) findViewById(R.id.navview);
