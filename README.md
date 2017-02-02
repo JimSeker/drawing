@@ -6,13 +6,14 @@ Android Drawing Examples
 
 <b>DrawDemo2</b> uses a customview to draw on a canvas.  There is also a touch listener, to draw blocks.
 
-<b>drawDemo3</b> uses a surfaceview.  Since a surface is for "animated" drawing, an alien moves accross the screen.  The user touches it and it moves to a new location. 
-
 <b>GameDemo</b> is a very simple space invaders like game using a surfaceview.
 
 <b>GraphicOverlayDemo</b> is an example of how to create a customview to draw on other views.
 
-<b>TextureViewDemo</b> is an example of how to draw on a surface (via a canvas) of a TextureView.  It uses a thread to update the moving block.
+<b>TextureViewDemo</b> is an example of how to draw on a surface (via a canvas) of a TextureView.  It uses a thread to update the moving block.  It shows to use an extended textureView or how use all the code in the main.
+
+<b>SurfaceViewDemo</b> uses a surfaceview.  Since a surface is for "animated" drawing, an alien moves accross the screen.  The user touches it and it moves to a new location. It shows to use an extended surfaceview or all it in the activity.
+
 
 <b>legacy</b><br>
 DrawDemo uses a canvas to draw on, then display via an imageview and  is no longer updated<BR>
