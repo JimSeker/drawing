@@ -12,6 +12,7 @@ Android Drawing Examples
 
 <b>GraphicOverlayDemo</b> is an example of how to create a customview to draw on other views.
 
+<b>TextureViewDemo</b> is an example of how to draw on a surface (via a canvas) of a TextureView.  It uses a thread to update the moving block.
 
 <b>legacy</b><br>
 DrawDemo uses a canvas to draw on, then display via an imageview and  is no longer updated<BR>
