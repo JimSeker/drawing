@@ -13,6 +13,8 @@ ZZ<b>TextureViewDemo</b> is an example of how to draw on a surface (via a canvas
 
 <b>SurfaceViewDemo</b> uses a surfaceview.  Since a surface is for "animated" drawing, an alien moves accross the screen.  The user touches it and it moves to a new location. It shows to use an extended surfaceview or all it in the activity.
 
+<b>TextureViewDemo</b> uses a Textureview, and the same example as surfaceviewDemo.
+
 <b>FlappyAlien</b> is a simple FlappyBird clone, to show how a game work work on a TextureView.
 
 
