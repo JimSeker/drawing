@@ -2,6 +2,7 @@ package edu.cs4730.drawdemo1;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         //setup a listener, which acts very similiar to how menus are handled.
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 //we could just as easily call onOptionsItemSelected(menuItem) and how it deal with it.
                 //Log.v(TAG, "We got someting?");
                 int id = menuItem.getItemId();

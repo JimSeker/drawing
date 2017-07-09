@@ -146,7 +146,7 @@ public class AnDrawFragment extends Fragment {
     * TouchListener will draw a square on the image where "touched".
     * If doing an animated clear, it will return without doing anything.
     */
-    class myTouchListener implements View.OnTouchListener {
+    public class myTouchListener implements View.OnTouchListener {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
 
