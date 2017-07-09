@@ -35,34 +35,42 @@ public class ObjPipe {
         //fake it for now.
         y = spot;
         x = width;
-        int pipew = Math.round(50*scale);
+        int pipew = Math.round(50 * scale);
 
-        toprec = new Rect (x,0, x+pipew, y);
-        bottomrec = new Rect (x,spot + gap, x+pipew, height);
+        toprec = new Rect(x, 0, x + pipew, y);
+        bottomrec = new Rect(x, spot + gap, x + pipew, height);
 
     }
 
     public boolean move() {
-        toprec.left = toprec.left -1;
-        toprec.right = toprec.right -1;
+        toprec.left = toprec.left - 1;
+        toprec.right = toprec.right - 1;
 
-        bottomrec.left = bottomrec.left -1;
-        bottomrec.right = bottomrec.right -1;
+        bottomrec.left = bottomrec.left - 1;
+        bottomrec.right = bottomrec.right - 1;
 
         if (toprec.right <= 0) return true;
         return false; //pipe is still on screen.
     }
-    public void imsecond() {
-        toprec.left = toprec.left + width/2;
-        toprec.right = toprec.right + width/2;
 
-        bottomrec.left = bottomrec.left + width/2;
-        bottomrec.right = bottomrec.right + width/2;
+    public void imsecond() {
+        toprec.left = toprec.left + width / 2;
+        toprec.right = toprec.right + width / 2;
+
+        bottomrec.left = bottomrec.left + width / 2;
+        bottomrec.right = bottomrec.right + width / 2;
     }
 
     public void draw(Canvas c) {
 
         c.drawRect(toprec, color);
         c.drawRect(bottomrec, color);
+    }
+
+    public boolean collide(Rect alien) {
+        if ((toprec.intersect(alien)) ||
+                (bottomrec.intersect(alien)))
+            return true;
+        return false;
     }
 }
