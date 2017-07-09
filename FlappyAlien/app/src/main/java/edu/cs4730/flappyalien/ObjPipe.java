@@ -8,17 +8,19 @@ import android.graphics.Rect;
 
 /**
  * Created by Seker on 7/8/2017.
+ *
+ * This is the code to represent the "pipe".
  */
 
 public class ObjPipe {
-    Context myContext;
-    int width, height;
-    int x, y;   //the bottom, left of the top "pipe"
-    int gap = 100;
-    float scale;
-    Rect toprec, bottomrec;
-    Paint color = new Paint();
-
+    private Context myContext;
+    private int width, height;
+    private int x, y;   //the bottom, left of the top "pipe"
+    private int gap = 100;
+    private float scale;
+    private Rect toprec, bottomrec;
+    private Paint color = new Paint();
+    private boolean scored = false;
     ObjPipe() {
 
     }
@@ -29,12 +31,14 @@ public class ObjPipe {
         height = h;
         gap = g;
         scale = s;
+        scored = false;
     }
 
     public void setup(int spot) {
         //fake it for now.
         y = spot;
         x = width;
+        scored = false;
         int pipew = Math.round(50 * scale);
 
         toprec = new Rect(x, 0, x + pipew, y);
@@ -61,6 +65,7 @@ public class ObjPipe {
         bottomrec.right = bottomrec.right + width / 2;
     }
 
+
     public void draw(Canvas c) {
 
         c.drawRect(toprec, color);
@@ -68,9 +73,19 @@ public class ObjPipe {
     }
 
     public boolean collide(Rect alien) {
-        if ((toprec.intersect(alien)) ||
-                (bottomrec.intersect(alien)))
-            return true;
-        return false;
+        return ((toprec.intersect(alien)) ||
+                (bottomrec.intersect(alien)));
+    }
+
+    public void setScored(boolean s) {
+        scored = s;
+    }
+
+    public boolean getScored() {
+        return scored;
+    }
+
+    public Rect getRect() {
+        return toprec;
     }
 }

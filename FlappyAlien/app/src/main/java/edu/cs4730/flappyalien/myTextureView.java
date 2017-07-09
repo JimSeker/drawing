@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -27,10 +28,12 @@ public class myTextureView extends TextureView implements TextureView.SurfaceTex
     int height, width, gap = 150;
     float scale;
     int tap;
+    int score = 0;
     String TAG = "textureview";
     ObjAlien alien;
     ObjPipe pipe, pipe2;
     Random r;
+    int WordHeight;
 
     public myTextureView(Context context) {
         super(context);
@@ -72,7 +75,7 @@ public class myTextureView extends TextureView implements TextureView.SurfaceTex
         black = new Paint();
         red = new Paint();
         red.setColor(Color.RED);
-        red.setTextSize(red.getTextSize()*10);
+        red.setTextSize(red.getTextSize() * 10);
         scale = myContext.getResources().getDisplayMetrics().density;  //this gives me the scale value for a mdpi baseline of 1.
         width = w;
         height = h;
@@ -84,6 +87,12 @@ public class myTextureView extends TextureView implements TextureView.SurfaceTex
         pipe2 = new ObjPipe(myContext, w, h, gap, scale);
         pipe2.setup(r.nextInt(h - gap - 10));
         pipe2.imsecond();
+        score = 0;
+
+        Rect bounds = new Rect();
+        String mText = String.valueOf(score);
+        red.getTextBounds(String.valueOf(score), 0, mText.length(), bounds);
+        WordHeight = bounds.height();
     }
 
     @Override
@@ -107,8 +116,10 @@ public class myTextureView extends TextureView implements TextureView.SurfaceTex
             if (gameover) {
                 //draw game over, tap to start.
                 c.drawText("GAME OVER", 100 * scale, 100 * scale, red);
-                c.drawText("Tap to start.", 100 * scale, 130 * scale, red);
+                c.drawText("Tap to start", 100 * scale, (100 * scale) + WordHeight, red);
             }
+            String mText = String.valueOf(score);
+            c.drawText(mText, 100*scale, WordHeight, red);
         }
     }
 
@@ -140,8 +151,25 @@ public class myTextureView extends TextureView implements TextureView.SurfaceTex
         }
         //collisions when I get there.
         if (pipe.collide(alien.getRect()) || pipe2.collide(alien.getRect())) {
-            gameover =true;
+            gameover = true;
         }
+
+        //scoring, so alien has passed the pipe and not already scored.
+        if (!pipe.getScored()) {
+            //now alien is fully past the pipe.
+            if (alien.getRect().left > pipe.getRect().right) {
+                score++;
+                pipe.setScored(true);
+            }
+        }
+        if (!pipe2.getScored()) {
+            //now alien is fully past the pipe.
+            if (alien.getRect().left > pipe2.getRect().right) {
+                score++;
+                pipe2.setScored(true);
+            }
+        }
+
     }
 
     class myThread extends Thread {
