@@ -73,8 +73,8 @@ public class ObjPipe {
     }
 
     public boolean collide(Rect alien) {
-        return ((toprec.intersect(alien)) ||
-                (bottomrec.intersect(alien)));
+        return ((Rect.intersects(toprec,alien)) ||
+                (Rect.intersects(bottomrec,alien)));
     }
 
     public void setScored(boolean s) {
