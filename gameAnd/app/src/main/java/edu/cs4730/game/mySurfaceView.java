@@ -333,7 +333,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 					}
 				}
 				try {
-					Thread.sleep(3);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
