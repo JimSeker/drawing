@@ -67,7 +67,7 @@ public class myTextureView extends TextureView implements TextureView.SurfaceTex
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {
         //Log.v(TAG,  "onSurfaceTextureUpdated");  //this is called a lot!
-        // Ignored
+        // Ignored  we could add on to the surface after everything is drawn, I think.
     }
 
 
@@ -193,7 +193,7 @@ public class myTextureView extends TextureView implements TextureView.SurfaceTex
                     //verify game state, move objects, etc...
                     checkGameState();
                 }
-                //redraw screen?
+                //redraw screen
                 final Canvas canvas = mSurface.lockCanvas(null);
                 try {
                     myDraw(canvas);

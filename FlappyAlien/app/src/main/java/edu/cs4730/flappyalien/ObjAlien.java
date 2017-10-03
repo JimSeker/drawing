@@ -9,6 +9,8 @@ import android.util.Log;
 
 /**
  * Created by Seker on 7/8/2017.
+ *
+ * This is the code to represent the "alien".
  */
 
 public class ObjAlien {
