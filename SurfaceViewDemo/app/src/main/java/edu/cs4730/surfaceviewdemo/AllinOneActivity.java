@@ -22,12 +22,12 @@ import java.util.Random;
  * All the code to make this work is in this class.
  */
 
-public class AllinOneActivity extends AppCompatActivity  implements SurfaceHolder.Callback{
+public class AllinOneActivity extends AppCompatActivity implements SurfaceHolder.Callback {
 
     private myThread thread;
     public Paint black;
     public int x, y;
-    private int height = 480, width=480 ;  //defaults incase not set yet.
+    private int height = 480, width = 480;  //defaults incase not set yet.
     private int alienheight, alienwidth;
     public Rect myRect;
     Bitmap alien;
@@ -35,6 +35,7 @@ public class AllinOneActivity extends AppCompatActivity  implements SurfaceHolde
     float scale;
 
     SurfaceView mSurfaceView;
+    String TAG = "AllinOneActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class AllinOneActivity extends AppCompatActivity  implements SurfaceHolde
         myRect = new Rect();
         x = myRand.nextInt(width - alienwidth);  //kept it inside the screen.
         y = myRand.nextInt(height - alienheight);
-        myRect.set(x,y,x +alienwidth,y+alienheight);
+        myRect.set(x, y, x + alienwidth, y + alienheight);
 
         black = new Paint();  //default is black and we really are not using it.  need it to draw the alien.
 
@@ -65,28 +66,26 @@ public class AllinOneActivity extends AppCompatActivity  implements SurfaceHolde
                 // Retrieve the new x and y touch positions
                 int touchx = (int) event.getX();
                 int touchy = (int) event.getY();
-                if (myRect.contains(touchx,touchy)) {
+                if (myRect.contains(touchx, touchy)) {
                     //touched the alien
-                    Log.v("hi", "collison");
+                    Log.v(TAG, "collision");
                     x = myRand.nextInt(width - alienwidth);
                     y = myRand.nextInt(height - alienheight);
                     //we could set each manually, or just use the set method.
                     //myRect.left =  x;
                     // myRect.top = y;
-                    myRect.set(x,y,x +alienwidth,y+alienheight);
+                    myRect.set(x, y, x + alienwidth, y + alienheight);
                     mSurfaceView.invalidate();
                 }
                 return true;
             }
         });
 
-        //setup the thread for animation.
-        thread = new myThread(mSurfaceView.getHolder());
 
         setContentView(mSurfaceView);
     }
 
-    //simple helper method to draw on the canvas.    (note in a SurfaceView, this is an overriden method.
+    //simple helper method to draw on the canvas.    (note in a SurfaceView, this is an overridden method.
     public void draw(Canvas c) {
 
         c.drawColor(Color.WHITE);
@@ -98,21 +97,25 @@ public class AllinOneActivity extends AppCompatActivity  implements SurfaceHolde
     //all the methods needed for the SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        Log.v(TAG, "surfaceCreated");
         //everything is setup, now start.
         height = mSurfaceView.getHeight();
         width = mSurfaceView.getWidth();
+        //setup the thread for animation.
+        thread = new myThread(mSurfaceView.getHolder());
         thread.setRunning(true);
         thread.start();
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        Log.v(TAG, "surfaceChanged");
         //ignored.
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        // simply copied from sample application LunarLander:
+        Log.v(TAG, "surfaceDestroyed");
         // we have to tell thread to shut down & wait for it to finish, or else
         // it might touch the Surface after we return and explode
         boolean retry = true;
@@ -127,31 +130,32 @@ public class AllinOneActivity extends AppCompatActivity  implements SurfaceHolde
         }
     }
 
-   /*
-    * this is the thread that causes the drawing and movement of an alien (pic) moving accross the screen.
-    */
+    /*
+     * this is the thread that causes the drawing and movement of an alien (pic) moving accross the screen.
+     */
     class myThread extends Thread {
         private SurfaceHolder _surfaceHolder;
 
-        private boolean _run = false;
+        private boolean Running = false;
 
         public myThread(SurfaceHolder surfaceHolder) {
             _surfaceHolder = surfaceHolder;
+        }
 
-        }
         public void setRunning(boolean run) {
-            _run = run;
+            Running = run;
         }
+
         @Override
         public void run() {
             Canvas c;
-            x=10;
-            while (_run) {
+            x = 10;
+            while (Running && !Thread.interrupted()) {
                 c = null;
                 try {
                     c = _surfaceHolder.lockCanvas(null);
                     synchronized (_surfaceHolder) {
-                        //call a mthod that draws all the required objects onto the canvas.
+                        //call a method that draws all the required objects onto the canvas.
                         draw(c);
                     }
                 } finally {
@@ -163,10 +167,14 @@ public class AllinOneActivity extends AppCompatActivity  implements SurfaceHolde
                     }
                 }
                 //move the alien accross the screen.
-                x += 2*scale;
-                if (x>width - alienwidth) {x=10;}
-                myRect.left = x; myRect.right =x + alienwidth;
+                x += 2 * scale;
+                if (x > width - alienwidth) {
+                    x = 10;
+                }
+                myRect.left = x;
+                myRect.right = x + alienwidth;
                 //sleep for a short period of time.
+                if (!Running) return;  //don't sleep, just exit if we are done.
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {

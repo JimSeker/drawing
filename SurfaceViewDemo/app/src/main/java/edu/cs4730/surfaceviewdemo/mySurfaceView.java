@@ -15,25 +15,25 @@ import android.view.SurfaceView;
 import java.util.Random;
 
 /**
- *  In this example, we want movement even when the user is not interacting with the
- *  screen.
- *    An alien is randomly placed on the screen and the moves to the right.  It reset to the left
- *    side if it is not touched.
- *    if touched, it moves to another place on the screen.
- *  The alien and movement is scaled based on the density of the screen as well.
- *
+ * In this example, we want movement even when the user is not interacting with the
+ * screen.
+ * An alien is randomly placed on the screen and the moves to the right.  It reset to the left
+ * side if it is not touched.
+ * if touched, it moves to another place on the screen.
+ * The alien and movement is scaled based on the density of the screen as well.
  */
-public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback{
+public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
     private myThread thread;
-    public Paint  black;
+    public Paint black;
     public int x, y;
-    private int height = 480, width=480 ;  //defaults incase not set yet.
+    private int height = 480, width = 480;  //defaults incase not set yet.
     private int alienheight, alienwidth;
     public Rect myRect;
     Bitmap alien;
     private Random myRand = new Random();
     float scale;
+    String TAG = "mySurfaceView";
 
     public mySurfaceView(Context context) {
         super(context);
@@ -47,13 +47,13 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         myRect = new Rect();
         x = myRand.nextInt(width - alienwidth);  //kept it inside the screen.
         y = myRand.nextInt(height - alienheight);
-        myRect.set(x,y,x +alienwidth,y+alienheight);
+        myRect.set(x, y, x + alienwidth, y + alienheight);
 
         black = new Paint();  //default is black and we really are not using it.  need it to draw the alien.
 
         //setup the thread for animation.
         getHolder().addCallback(this);
-        thread = new myThread(getHolder(), this);
+
     }
 
     @Override
@@ -67,41 +67,46 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         //everything is setup, now start.
+        Log.v(TAG, "surfaceCreated");
         height = getHeight();
         width = getWidth();
+        thread = new myThread(getHolder(), this);
         thread.setRunning(true);
         thread.start();
     }
+
     /*
      * touch event to deal with when the user touches the alien.
      *
      */
-    @Override public boolean onTouchEvent(MotionEvent event) {
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
         // Retrieve the new x and y touch positions
         int touchx = (int) event.getX();
         int touchy = (int) event.getY();
-        if (myRect.contains(touchx,touchy)) {
+        if (myRect.contains(touchx, touchy)) {
             //touched the alien
-            Log.v("hi", "collison");
+            Log.v("hi", "collision");
             x = myRand.nextInt(width - alienwidth);
             y = myRand.nextInt(height - alienheight);
             //we could set each manually, or just use the set method.
-           //myRect.left =  x;
-           // myRect.top = y;
-            myRect.set(x,y,x +alienwidth,y+alienheight);
+            //myRect.left =  x;
+            // myRect.top = y;
+            myRect.set(x, y, x + alienwidth, y + alienheight);
         }
         return true;
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        Log.v(TAG, "surfaceChanged");
         //ignored.
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        // simply copied from sample application LunarLander:
+        Log.v(TAG, "surfaceDestroyed");
         // we have to tell thread to shut down & wait for it to finish, or else
         // it might touch the Surface after we return and explode
         boolean retry = true;
@@ -122,20 +127,22 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     class myThread extends Thread {
         private SurfaceHolder _surfaceHolder;
         private mySurfaceView _mySurfaceView;
-        private boolean _run = false;
+        private boolean Running = false;
 
         public myThread(SurfaceHolder surfaceHolder, mySurfaceView SurfaceView) {
             _surfaceHolder = surfaceHolder;
             _mySurfaceView = SurfaceView;
         }
+
         public void setRunning(boolean run) {
-            _run = run;
+            Running = run;
         }
+
         @Override
         public void run() {
             Canvas c;
-            x=10;
-            while (_run) {
+            x = 10;
+            while (Running && !Thread.interrupted()) {
                 c = null;
                 try {
                     c = _surfaceHolder.lockCanvas(null);
@@ -152,10 +159,14 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                     }
                 }
                 //move the alien accross the screen.
-                x += 2*scale;
-                if (x>width - alienwidth) {x=10;}
-                myRect.left = x; myRect.right =x + alienwidth;
+                x += 2 * scale;
+                if (x > width - alienwidth) {
+                    x = 10;
+                }
+                myRect.left = x;
+                myRect.right = x + alienwidth;
                 //sleep for a short period of time.
+                if (!Running) return;  //don't sleep, just exit if we are done.
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -165,6 +176,4 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             }
         }
     }
-
-
 }
