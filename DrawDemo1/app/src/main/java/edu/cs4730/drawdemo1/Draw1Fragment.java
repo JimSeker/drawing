@@ -21,8 +21,8 @@ import android.widget.Spinner;
 
 
 /**
- * Only draws one ojbect to the image at time and ones where two taps are needed, with animate
- * the drawing of the object, until the finger is lifted on the seoncd tap.
+ * Only draws one object to the image at time and ones where two taps are needed, with animate
+ * the drawing of the object, until the finger is lifted on the second tap.
  */
 public class Draw1Fragment extends Fragment {
     ImageView theboardfield;
