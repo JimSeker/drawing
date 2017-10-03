@@ -14,6 +14,14 @@ import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
+/*
+ *  This code implements a basic space like invaders game.   The code has not aged well (from android 2.2 on a droid 1)
+ *  and in truth needs to set fire too and completely rewritten.
+ *
+ *  This example may died when the screen locks, because it surface is destoried and yet it still tries to
+ *  draw.  again... "set fire too and completely rewritten".
+ */
+
 public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback { 
 	private myThread thread;
 	public Paint red, black;
@@ -35,6 +43,8 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 	float scale;
 	Random myRandom;
 	char[] chars = {'q','p',' '};
+
+	String TAG = "mySurfaceView";
 
 	public mySurfaceView(Context context) {
 		super(context);
@@ -58,8 +68,8 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 		scale = getResources().getDisplayMetrics().density;  //this gives me the scale value for a mdpi baseline of 1.
 		right *= scale;
 		left *= scale; //currently zero, so this is pointless.
-		Log.v("setup", "right is " + right);
-		Log.v("Setup", "dpi is "+ scale);
+		Log.v(TAG, "SETUP: right is " + right);
+		Log.v(TAG, "SETUP: dpi is "+ scale);
 		top *= scale;
 		bottom *= scale;
 		leftbtn *= scale;
@@ -81,7 +91,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 		black.setTextSize(black.getTextSize()*scale);  //scale the font size too
 		myRandom = new Random();
 		getHolder().addCallback(this);
-		thread = new myThread(getHolder(), this);
+		//thread = new myThread(getHolder(), this);
 		
 
 
@@ -133,11 +143,13 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
+		Log.v(TAG, "surfaceChanged ");
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
+		Log.v(TAG,"surfaceCreated ");
+		thread = new myThread(getHolder(), this);
 		thread.setRunning(true);
 		thread.start();
 
@@ -145,6 +157,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
+		Log.v(TAG, "surfaceDestroyed");
 		// simply copied from sample application LunarLander:
 		// we have to tell thread to shut down & wait for it to finish, or else
 		// it might touch the Surface after we return and explode

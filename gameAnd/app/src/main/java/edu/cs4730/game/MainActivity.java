@@ -1,7 +1,7 @@
 package edu.cs4730.game;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -13,7 +13,7 @@ import android.view.Window;
  * bulk of the project is in the mySurfaceView class.
  */
 
-public class gameAnd extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
