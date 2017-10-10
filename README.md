@@ -6,7 +6,7 @@ Android Drawing Examples
 
 <b>drawDemo2</b> uses a customview to draw on a canvas.  There is also a touch listener, to draw blocks.
 
-<b>gameAnd</b> is a very simple space invaders like game using a surfaceview.
+<b>AlienInvaders</b> is a very simple space invaders like game using a surfaceview.
 
 <b>GraphicOverlayDemo</b> is an example of how to create a customview to draw on other views.
 
@@ -16,9 +16,10 @@ Android Drawing Examples
 
 <b>FlappyAlien</b> is a simple FlappyBird clone, to show how a game work work on a TextureView.
 
-<b>legacy</b><br>
+<b>legacy</b> no longer updated code.<br>
 DrawDemo uses a canvas to draw on, then display via an imageview and  is no longer updated<BR>
-svtest is a very simple SurfaceView to draw and "animate" a moving box and is no longer updated.
+svtest is a very simple SurfaceView to draw and "animate" a moving box and is no longer updated.<BR>
+gameAnd is a simple game and with broken surfaceView demo code.
 
 
 These are example code for University of Wyoming, Cosc 4730 Mobile Programming course.
