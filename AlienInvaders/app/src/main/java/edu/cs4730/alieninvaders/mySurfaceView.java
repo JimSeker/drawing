@@ -16,13 +16,11 @@ import java.util.Random;
 import java.util.Vector;
 
 /**
- *  This code implements a basic space like invaders game.   The code to controll and move the aliens
- *  has not aged well (from android 2.2 on a droid 1 and different screen size)
- *  and in truth needs to set fire too and completely rewritten.
- *
- *  The rest of the code should be pretty good at this point with minor fixes needed here and
- *  there.
- *
+ * This code implements a basic space like invaders game.   The code to move the aliens is in
+ * the process of being rewritten, but I'm still not sure I shouldn't just burn it and start over.
+ * <p>
+ * The rest of the code should be pretty good at this point with minor fixes needed here and
+ * there.
  */
 
 public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback {
@@ -43,7 +41,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
   //game variables
   boolean gameover = false;
-  int alienmove = 1, shotmove = 1;
+  int alienmove = 1, shotmove = 1, shipmove = 1;
   int maxAliens = 5, maxShots = 3;
   int score = 0;
   int moveship = 0;
@@ -58,10 +56,10 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     super(context);
 
     //BitmapFactory.Options() has methods to scale or not to scale.
-    shipBmp = BitmapFactory.decodeResource(getResources(), R.drawable.ship);
     alien1Bmp = BitmapFactory.decodeResource(getResources(), R.drawable.alien);
     alien2Bmp = BitmapFactory.decodeResource(getResources(), R.drawable.alien2);
-    shotBmp = BitmapFactory.decodeResource(getResources(), R.drawable.shot);
+    shotBmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.shot);
+    shipBmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.ship);
 
     //now deal with the density ie dpi for the screen size.  All above of this assumes mdpi (default 1:1), except
     //well the new phones and stuff are xxdvpi (which android says won't happen...), xdpi, etc.  So need scaling
@@ -88,6 +86,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     shots = new Vector<obj>();
     shotmove *= scale;
     alienmove *= scale;
+    shipmove += scale;
 
     //required call to kick start the surfaceView callbacks.
     getHolder().addCallback(this);
@@ -139,7 +138,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     black.getTextBounds("RIGHT", 0, "RIGHT".length(), bounds);
     c.drawText("RIGHT", third + third + (third / 2.0f) - bounds.width() / 2.0f, heightcenter, black);  //should be centered.
 
-    ship = new obj(((int) (left + right) / 2) - shipBmp.getWidth(), (int) bottom - shipBmp.getHeight(), 0, shipBmp.getWidth(), shipBmp.getHeight());
+    ship = new objShip(((int) (left + right) / 2) - shipBmp.getWidth(), (int) bottom - shipBmp.getHeight(), 0, shipBmp.getWidth(), shipBmp.getHeight(), shipBmp);
 
     //game over location
     black.getTextBounds("Game Over", 0, "Game Over".length(), bounds);
@@ -163,25 +162,20 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     //draw score
     c.drawText("Score: " + score, 0, fontHeight, black);
     //draw the ship
-    c.drawBitmap(shipBmp, ship.x, ship.y, null);
+    ship.draw(c);
+
     //draw aliens
-    obj temp;
     if (!aliens.isEmpty()) {
       for (int i = 0; i < aliens.size(); i++) {
-        temp = (obj) aliens.elementAt(i);
-        temp.imgcnt();
-        if (temp.whichpic == 0)
-          c.drawBitmap(alien1Bmp, temp.x, temp.y, null);
-        else
-          c.drawBitmap(alien2Bmp, temp.x, temp.y, null);
+        ((obj) aliens.elementAt(i)).draw(c);
       }
     }
 
     //draw shots
     if (!shots.isEmpty()) {
       for (int i = 0; i < shots.size(); i++) {
-        temp = (obj) shots.elementAt(i);
-        c.drawBitmap(shotBmp, temp.x, temp.y, null);
+        ((obj) shots.elementAt(i)).draw(c);
+
       }
     }
     if (gameover) {
@@ -191,80 +185,74 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
 
   void checkGameState() {
-    obj temp, tmp2;
+
+    objAlien tempAlien;
+    objShot tempShot;
+
     //move ship and deal with new shot.
     if (moveship != 0) { //going left maybe
       if (ship.x + moveship >= left && ship.x + moveship <= right - shipBmp.getWidth()) { //don't move ship off edge of the board
         ship.move(moveship, 0);
       }
-      moveship = 0;
     }
-    if (tofire) {
+    if (tofire) {  //user pushed the "fire button"
       if (shots.size() < maxShots) {
-        shots.addElement(new obj(ship.x + (shipBmp.getWidth() / 2) - (shotBmp.getWidth() / 2), (int) bottom - shipBmp.getHeight() - shotBmp.getHeight(), 0, shotBmp.getWidth(), shotBmp.getHeight()));
+        shots.addElement(new objShot(ship.x + (shipBmp.getWidth() / 2) - (shotBmp.getWidth() / 2), (int) bottom - shipBmp.getHeight() - shotBmp.getHeight(), 0, shotBmp.getWidth(), shotBmp.getHeight(), shotBmp));
       }
       tofire = false;
     }
+
     //aliens section
     if (!aliens.isEmpty()) {
       //move aliens and check for landing.
       for (int i = 0; i < aliens.size(); i++) {
-        temp = (obj) aliens.elementAt(i);
-        if (temp.tickU(3)) { //yes move the alien   this kepts the alien from moving to fast.  likely to slow with scaleing.  fix? don't know.
-          //now direction
-          if (temp.tick2U(15)) {  //choose a new direction
-            temp.dir = myRandom.nextInt(3) - 1;  //-1, 0, or +1  for direction.
-          }
-          if (temp.x + ship.dir <= left || temp.x + ship.dir >= right - alien1Bmp.getWidth()) { //don't move alien off edge of the board
-            temp.dir *= -1;
-          }
-          if (temp.y + alien1Bmp.getHeight() >= bottom) {  //alien landed.  game over!
-            gameover = true;
-          }
-          temp.move(temp.dir, +alienmove);   //alienmove is the 1* scale.
+        tempAlien = (objAlien) aliens.elementAt(i);
+        tempAlien.move(alienmove, left, right);
+        if (tempAlien.y + alien1Bmp.getHeight() >= bottom) {  //alien landed.  game over!
+          gameover = true;
         }
       }
       //add another alien?
       if (aliens.size() < maxAliens) {
-        if (myRandom.nextInt(100) > 97) { //3 percent change of a new alien being added right now.
+        if (myRandom.nextInt(100) > 98) { //3 percent change of a new alien being added right now.
           int x = (int) left + myRandom.nextInt((int) right - (int) left - alien1Bmp.getWidth());
 
-          aliens.addElement(new obj(x, (int) top, 0, alien1Bmp.getWidth(), alien1Bmp.getHeight()));
+          aliens.addElement(new objAlien(x, (int) top, 0, alien1Bmp.getWidth(), alien1Bmp.getHeight(), alien1Bmp, alien2Bmp));
         }
       }
     } else {  //no aliens on the board, so add a new one
       int x = (int) left + myRandom.nextInt((int) right - (int) left - alien1Bmp.getWidth());
-      aliens.addElement(new obj(x, (int) top, 0, alien1Bmp.getWidth(), alien1Bmp.getHeight()));
+      aliens.addElement(new objAlien(x, (int) top, 0, alien1Bmp.getWidth(), alien1Bmp.getHeight(), alien1Bmp, alien2Bmp));
     }
 
     //move shots
     if (!shots.isEmpty()) {
       for (int i = 0; i < shots.size(); i++) {
-        temp = (obj) shots.elementAt(i);
-        if (temp.y - shotmove > top) {
-          temp.move(0, -shotmove);   //shotmove is the 1*scale.
-        } else {
-          //remove shot
-          temp.dead();
+        //first move it.
+        tempShot = (objShot) shots.elementAt(i);
+        tempShot.move(-shotmove, shotmove, top);
+        if (!tempShot.isAlive()) { //return false if dead
+
+          //so remove it and check the next;
           shots.removeElementAt(i);
-          //decrement index? to see next one?
           --i;
         }
+
       }
     }
     //check for collisions
     if (!(shots.isEmpty() || aliens.isEmpty())) { //no collisions if no aliens or no shots
       for (int i = 0; i < shots.size(); i++) {
-        temp = (obj) shots.elementAt(i);
-        for (int j = 0; j < aliens.size() && temp.alive; j++) {
-          tmp2 = (obj) aliens.elementAt(j);
-          if (temp.collision(tmp2.rec)) {
-            temp.dead();
-            tmp2.dead();
-            score += tmp2.score();
+        tempShot = (objShot) shots.elementAt(i);
+        for (int j = 0; j < aliens.size() && tempShot.alive; j++) {
+          tempAlien = (objAlien) aliens.elementAt(j);
+          if (tempShot.collision(tempAlien.rec)) {
+            tempShot.dead();
+            tempAlien.dead();
+            score += tempAlien.score();
             aliens.removeElementAt(j);
           }
-          if (!temp.alive) {
+          if (!tempShot.alive) {
             shots.removeElementAt(i);
             i--;
           }
@@ -288,15 +276,24 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
       case MotionEvent.ACTION_DOWN:
         if (y > bottom) { //below playing area
           if (x < leftbtn) { //left
-            moveship = -5;  //and yet this seems to be dpi independent, I think... why?
-            return true;
+            moveship = -shipmove;  //and yet this seems to be dpi independent, I think... why?
           } else if (x < firebtn) { //fire
             tofire = true;
+          } else if (x <= rightbtn) {
+            moveship = shipmove;
+          }
+          return true;
+        }
+      case MotionEvent.ACTION_UP:  //stop moving left or right.  user has lifted their finger.
+        if (y > bottom) { //below playing area
+          if (x < leftbtn) { //left
+            moveship = 0;
+          } else if (x < firebtn) { //don't care about fire, handled in down.
             return true;
           } else if (x <= rightbtn) {
-            moveship = 5;
-            return true;
+            moveship = 0;
           }
+          return true;
         }
     }
     return false;
@@ -350,11 +347,11 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
      */
 
   private class myThread extends Thread {
-    private SurfaceHolder _surfaceHolder;
+    private final SurfaceHolder _surfaceHolder;
     private mySurfaceView _mySurfaceView;
     private boolean running = false;
 
-    public myThread(SurfaceHolder surfaceHolder, mySurfaceView SurfaceView) {
+    private myThread(SurfaceHolder surfaceHolder, mySurfaceView SurfaceView) {
       _surfaceHolder = surfaceHolder;
       _mySurfaceView = SurfaceView;
     }
