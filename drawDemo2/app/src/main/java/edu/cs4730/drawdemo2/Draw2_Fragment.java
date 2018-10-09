@@ -1,7 +1,7 @@
 package edu.cs4730.drawdemo2;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-/*
+/**
  * This demos a custom view.  There is almost nothing in this activity
  * except for a call to the customview to reset the grid from a menu item.
  * 
