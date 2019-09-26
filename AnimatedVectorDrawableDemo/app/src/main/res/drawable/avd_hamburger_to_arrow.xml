@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:drawable="@drawable/vector_drawable_hamburger">
+
+    <target
+        android:name="top_container"
+        android:animation="@animator/anim_top_container" />
+    <target
+        android:name="bottom_container"
+        android:animation="@animator/anim_bottom_container" />
+    <target
+        android:name="menu"
+        android:animation="@animator/anim_menu" />
+
+</animated-vector>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <group
+        android:name="menu"
+        android:pivotX="12"
+        android:pivotY="12">
+        <group
+            android:name="bottom_container"
+            android:pivotX="20"
+            android:pivotY="17">
+            <path
+                android:name="bottom"
+                android:pathData="M4,17 L20,17"
+                android:strokeColor="#000"
+                android:strokeWidth="2"
+                android:strokeLineJoin="miter"
+                android:strokeMiterLimit="10"/>
+        </group>
+        <group
+            android:name="stem_container"
+            android:pivotX="12"
+            android:pivotY="12">
+            <path
+                android:name="stem"
+                android:pathData="M4,12 L20,12"
+                android:strokeColor="#000"
+                android:strokeWidth="2"
+                android:strokeLineJoin="miter"
+                android:strokeMiterLimit="10"/>
+        </group>
+        <group
+            android:name="top_container"
+            android:pivotX="20"
+            android:pivotY="7">
+            <path
+                android:name="top"
+                android:pathData="M4,7 L20,7"
+                android:strokeColor="#000"
+                android:strokeWidth="2"
+                android:strokeLineJoin="miter"
+                android:strokeMiterLimit="10"/>
+        </group>
+
+    </group>
+
+
+</vector>
