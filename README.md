@@ -16,6 +16,11 @@ Android Drawing Examples
 
 <b>FlappyAlien</b> is a simple FlappyBird clone, to show how a game work work on a TextureView.
 
+
+<a>AnimatedGifDemo</b> shows how to use the animated Drawable class to have animated gifs.  NOTE: api 28+
+
+<b>AnimatedVectorDrawableDemo</b> show how to use Vector graphics animate them.  uses the androidx.vectordrawable
+
 <b>legacy</b> no longer updated code.<br>
 DrawDemo uses a canvas to draw on, then display via an imageview and  is no longer updated<BR>
 svtest is a very simple SurfaceView to draw and "animate" a moving box and is no longer updated.<BR>
