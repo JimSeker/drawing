@@ -2,9 +2,13 @@ Android Drawing Examples
 ===========
 <b>eclipse/</b> has the eclipse projects, no longer updated.  Everything else is in andriod studio
 
-<b>DrawDemo1</b> uses a canvas from a imageview to draw on.  There are 4 fragments.  main draws different types of objects, based on a spinner and some need two taps to be drawn like a line.  there is a animated fragments to clear an uses a thread, asyc uses a aysctask. draw1 only draws one object on the screen.
+<b>DrawDemo1</b> (java) uses a canvas from a imageview to draw on.  There are 4 fragments.  main draws different types of objects, based on a spinner and some need two taps to be drawn like a line.  there is a animated fragments to clear an uses a thread, asyc uses a aysctask. draw1 only draws one object on the screen.
 
-<b>drawDemo2</b> uses a customview to draw on a canvas.  There is also a touch listener, to draw blocks.
+<b>DrawDemo1_tk</b> (kotlin) uses a canvas from a imageview to draw on.  There are 4 fragments.  main draws different types of objects, based on a spinner and some need two taps to be drawn like a line.  there is a animated fragments to clear an uses a thread, asyc uses a aysctask. draw1 only draws one object on the screen.
+
+<b>drawDemo2</b> (java) uses a customview to draw on a canvas.  There is also a touch listener, to draw blocks.
+
+<b>drawDemo2_tk</b> (kotlin) uses a customview to draw on a canvas.  There is also a touch listener, to draw blocks.
 
 <b>AlienInvaders</b> is a very simple space invaders like game using a surfaceview.
 

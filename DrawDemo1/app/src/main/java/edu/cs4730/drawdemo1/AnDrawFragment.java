@@ -9,8 +9,11 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
+
 import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -25,7 +28,6 @@ import android.widget.Spinner;
 
 /**
  * This uses an animated clear button, instead of just clearing it.
- *
  */
 public class AnDrawFragment extends Fragment {
     ImageView theboardfield;
@@ -84,7 +86,7 @@ public class AnDrawFragment extends Fragment {
         //first we will work on the spinner1 (which controls the seekbar)
         mySpinner = (Spinner) myView.findViewById(R.id.spinner);
         //create the ArrayAdapter of strings from my List.
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, list);
         //set the dropdown layout
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //finally set the adapter to the spinner
@@ -126,26 +128,25 @@ public class AnDrawFragment extends Fragment {
         alien = BitmapFactory.decodeResource(getResources(), R.drawable.alien);
 
         //message handler for the animation.
-        handler = new Handler(new Handler.Callback() {
+        handler = new Handler(Looper.getMainLooper()) {
             @Override
-            public boolean handleMessage(Message msg) {
+            public void handleMessage(Message msg) {
                 if (msg.what == 0) { //redraw image
                     if (theboard != null && theboardfield != null) {
                         refreshBmp();
                     }
                 }
-                return true;
             }
-        });
+        };
         //draw it on the screen.
         //theboardc.drawBitmap(alien, null, new Rect(0, 0, 300, 300), myColor);
         return myView;
     }
 
     /*
-    * TouchListener will draw a square on the image where "touched".
-    * If doing an animated clear, it will return without doing anything.
-    */
+     * TouchListener will draw a square on the image where "touched".
+     * If doing an animated clear, it will return without doing anything.
+     */
     public class myTouchListener implements View.OnTouchListener {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -263,8 +264,8 @@ public class AnDrawFragment extends Fragment {
     }
 
     /* (non-Javadoc)
-  * @see android.app.Activity#onPause()
-  */
+     * @see android.app.Activity#onPause()
+     */
     public void onPause() {
         finish();
         super.onPause();
@@ -304,14 +305,14 @@ public class AnDrawFragment extends Fragment {
         myThread.start();
     }
 
-    /*
-    * this is an thread, so it can run the "animated" clear button"
-    * So it draws a line with the current color down the image, and then white back up to clear
-    *
-    * Since this is a sub class, it has access to all the "global" variables.  But it's a thread
-    * so it can't change the widgets.  That's what the handler does.  When a new image is ready
-    * it sends a message to the handler that is on the main thread.  The handler then updates the
-    * imageview with the bitmap image.
+    /**
+     * this is an thread, so it can run the "animated" clear button"
+     * So it draws a line with the current color down the image, and then white back up to clear
+     *
+     * Since this is a sub class, it has access to all the "global" variables.  But it's a thread
+     * so it can't change the widgets.  That's what the handler does.  When a new image is ready
+     * it sends a message to the handler that is on the main thread.  The handler then updates the
+     * imageview with the bitmap image.
      */
     class animator implements Runnable {
         animator() {

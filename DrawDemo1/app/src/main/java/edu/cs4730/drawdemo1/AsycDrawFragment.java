@@ -80,7 +80,7 @@ public class AsycDrawFragment extends Fragment {
         //first we will work on the spinner1 (which controls the seekbar)
         mySpinner = (Spinner) myView.findViewById(R.id.spinner);
         //create the ArrayAdapter of strings from my List.
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, list);
         //set the dropdown layout
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //finally set the adapter to the spinner

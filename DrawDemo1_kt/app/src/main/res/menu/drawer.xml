@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/drawing"
+        android:title="Draw All"
+        />
+    <item
+        android:id="@+id/drawing1"
+        android:title="Draw One"
+        />
+    <item
+        android:id="@+id/andraw"
+        android:title="Animation"
+        />
+    <item
+        android:id="@+id/asdraw"
+        android:title="Async Animation"
+        />
+</menu>
