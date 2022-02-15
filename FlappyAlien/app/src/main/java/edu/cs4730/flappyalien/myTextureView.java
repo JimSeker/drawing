@@ -123,6 +123,7 @@ public class myTextureView extends TextureView implements TextureView.SurfaceTex
         }
     }
 
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 

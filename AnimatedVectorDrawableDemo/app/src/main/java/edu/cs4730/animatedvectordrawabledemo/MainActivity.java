@@ -12,7 +12,6 @@ import android.widget.ImageView;
  * second one is from https://stories.uplabs.com/animated-icons-on-android-ee635307bd6 that works much better.
  */
 
-
 public class MainActivity extends AppCompatActivity {
     Animatable animatable, animatable2;
 
