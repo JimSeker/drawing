@@ -13,6 +13,7 @@ import android.hardware.camera2.CaptureRequest;
 import android.os.Handler;
 import android.os.HandlerThread;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import android.util.Log;
@@ -61,18 +62,18 @@ public class Camera2Preview extends SurfaceView implements SurfaceHolder.Callbac
 
     //Methods for the SurfaceView
     @Override
-    public void surfaceCreated(SurfaceHolder holder) {
+    public void surfaceCreated(@NonNull SurfaceHolder holder) {
         Log.e(TAG, "Surfaceview Created");
         openCamera();
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
         //startPreview();
     }
 
     @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
+    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
         if (mCameraDevice != null) {
             mCameraDevice.close();
         }
@@ -124,14 +125,14 @@ public class Camera2Preview extends SurfaceView implements SurfaceHolder.Callbac
             mCameraDevice.createCaptureSession(Arrays.asList(surface), new CameraCaptureSession.StateCallback() {
 
                 @Override
-                public void onConfigured(CameraCaptureSession session) {
+                public void onConfigured(@NonNull CameraCaptureSession session) {
 
                     mPreviewSession = session;
                     updatePreview();
                 }
 
                 @Override
-                public void onConfigureFailed(CameraCaptureSession session) {
+                public void onConfigureFailed(@NonNull CameraCaptureSession session) {
 
                     Toast.makeText(context, "onConfigureFailed", Toast.LENGTH_LONG).show();
                 }
@@ -173,7 +174,7 @@ public class Camera2Preview extends SurfaceView implements SurfaceHolder.Callbac
     private CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
 
         @Override
-        public void onOpened(CameraDevice camera) {
+        public void onOpened(@NonNull CameraDevice camera) {
 
             Log.e(TAG, "onOpened");
             mCameraDevice = camera;
@@ -185,13 +186,13 @@ public class Camera2Preview extends SurfaceView implements SurfaceHolder.Callbac
 
 
         @Override
-        public void onDisconnected(CameraDevice camera) {
+        public void onDisconnected(@NonNull CameraDevice camera) {
 
             Log.e(TAG, "onDisconnected");
         }
 
         @Override
-        public void onError(CameraDevice camera, int error) {
+        public void onError(@NonNull CameraDevice camera, int error) {
 
             Log.e(TAG, "onError");
         }
