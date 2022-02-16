@@ -1,12 +1,16 @@
 package edu.cs4730.surfaceviewdemo;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -16,9 +20,8 @@ import android.view.View;
 
 import java.util.Random;
 
-/*
+/**
  * simple example of a surfaceView with a picture that moves across the screen with a touchlistener.
- *
  * All the code to make this work is in this class.
  */
 
@@ -37,6 +40,7 @@ public class AllinOneActivity extends AppCompatActivity implements SurfaceHolder
     SurfaceView mSurfaceView;
     String TAG = "AllinOneActivity";
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +100,7 @@ public class AllinOneActivity extends AppCompatActivity implements SurfaceHolder
 
     //all the methods needed for the SurfaceHolder.Callback
     @Override
-    public void surfaceCreated(SurfaceHolder holder) {
+    public void surfaceCreated(@NonNull SurfaceHolder holder) {
         Log.v(TAG, "surfaceCreated");
         //everything is setup, now start.
         height = mSurfaceView.getHeight();
@@ -108,13 +112,13 @@ public class AllinOneActivity extends AppCompatActivity implements SurfaceHolder
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
         Log.v(TAG, "surfaceChanged");
         //ignored.
     }
 
     @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
+    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
         Log.v(TAG, "surfaceDestroyed");
         // we have to tell thread to shut down & wait for it to finish, or else
         // it might touch the Surface after we return and explode
@@ -134,7 +138,7 @@ public class AllinOneActivity extends AppCompatActivity implements SurfaceHolder
      * this is the thread that causes the drawing and movement of an alien (pic) moving accross the screen.
      */
     class myThread extends Thread {
-        private SurfaceHolder _surfaceHolder;
+        private final SurfaceHolder _surfaceHolder;
 
         private boolean Running = false;
 

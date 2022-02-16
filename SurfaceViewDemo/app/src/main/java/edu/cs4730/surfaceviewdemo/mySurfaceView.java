@@ -1,5 +1,6 @@
 package edu.cs4730.surfaceviewdemo;
 
+import androidx.annotation.NonNull;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -65,7 +66,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     @Override
-    public void surfaceCreated(SurfaceHolder holder) {
+    public void surfaceCreated(@NonNull SurfaceHolder holder) {
         //everything is setup, now start.
         Log.v(TAG, "surfaceCreated");
         height = getHeight();
@@ -99,13 +100,13 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
         Log.v(TAG, "surfaceChanged");
         //ignored.
     }
 
     @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
+    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
         Log.v(TAG, "surfaceDestroyed");
         // we have to tell thread to shut down & wait for it to finish, or else
         // it might touch the Surface after we return and explode
@@ -125,8 +126,8 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
      * this is the thread that causes the drawing and movement of an alien (pic) moving accross the screen.
      */
     class myThread extends Thread {
-        private SurfaceHolder _surfaceHolder;
-        private mySurfaceView _mySurfaceView;
+        private final SurfaceHolder _surfaceHolder;
+        private final mySurfaceView _mySurfaceView;
         private boolean Running = false;
 
         public myThread(SurfaceHolder surfaceHolder, mySurfaceView SurfaceView) {

@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SeparateActivity" />
-        <activity android:name=".AllinOneActivity"></activity>
+        <activity android:name=".AllinOneActivity"/>
     </application>
 
 </manifest>
