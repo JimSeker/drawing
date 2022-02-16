@@ -3,7 +3,6 @@ package edu.cs4730.drawdemo2_tk
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -155,7 +154,7 @@ class DrawView : View {
 	 * 
 	 */
     fun where(x: Int, y: Int, color: Int, recolor: Boolean): Boolean {
-        var x = x
+        var x = x  //don't actually need another variable, but kotlin is dumb and won't let me change a parameter.
         var y = y
         var cx = -1
         var cy = -1
@@ -178,9 +177,8 @@ class DrawView : View {
          * If outside the lines, then popup a dialog and ask about reseting the board.
          * Interestingly, nothing is deprecated in the view
          */
-        var dialog: Dialog? = null
-        val builder: AlertDialog.Builder
-        builder = AlertDialog.Builder(myContext)
+        var dialog: Dialog
+        val builder: AlertDialog.Builder = AlertDialog.Builder(myContext)
         builder.setMessage("Reset board?")
             .setCancelable(false)
             .setPositiveButton("Yes") { dialog, id -> clearmaze() }
@@ -212,15 +210,14 @@ class DrawView : View {
                 where(x, y, Color.YELLOW, false)
                 invalidate()
             }
+            MotionEvent.ACTION_UP -> {
+                performClick()
+            }
         }
         return true
     }
 
-    /*
-	 * (non-Javadoc)
-	 * @see android.view.View#onMeasure(int, int)
-	 * 
-	 * 
+    /**
 	 * using this to get the size of the view.
 	 * now... I should likely set the height if the
 	 * view is using wrapcontent instead matchparent
@@ -234,9 +231,11 @@ class DrawView : View {
         mwidth = measuredWidth
         mheight = measuredHeight
         if (mheight > 0 && mwidth > mheight) {
-            mwidth = mheight
+            mwidth = mheight  //make it square
         } else if (mheight == 0) {
             mheight = mwidth
+        } else if (mheight > mwidth) {
+            mheight = mwidth //make it square
         }
         setsizes()
 

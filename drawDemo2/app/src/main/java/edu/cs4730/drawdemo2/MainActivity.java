@@ -7,8 +7,8 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
- * this does nothing except get the fragment
- * see fragment code for what this example does.
+ * This demos a custom view.  There is almost nothing in this activity
+ * except for a call to the customview to reset the grid from a menu item.
  */
 
 public class MainActivity extends AppCompatActivity {
