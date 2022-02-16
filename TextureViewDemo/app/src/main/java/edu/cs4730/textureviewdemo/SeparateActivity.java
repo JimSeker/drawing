@@ -6,10 +6,8 @@ import android.view.Gravity;
 import android.widget.FrameLayout;
 
 
-/*
- *
+/**
  *  This basically new myTextureView, so most of the code in myTextView.java instead of here.
- *
  *   This could even be setup with a R.layout.x instead.
  */
 

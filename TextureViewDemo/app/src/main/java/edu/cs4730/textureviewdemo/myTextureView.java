@@ -1,5 +1,7 @@
 package edu.cs4730.textureviewdemo;
 
+import androidx.annotation.NonNull;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -44,42 +46,40 @@ public class myTextureView extends TextureView implements TextureView.SurfaceTex
         setSurfaceTextureListener(this);  //Required or the TextureView never starts up.
     }
 
-    /*
+    /**
      * TextureView.SurfaceTextureListener overrides below, that start up the drawing thread.
      */
     @Override
-    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+    public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surface, int width, int height) {
         Log.v(TAG, "onSurfaceTextureAvailable");
         //We can't override the draw(canvas) function, so we need to access the surface
         //via here and pass it to the thread to draw on it.
         mThread = new RenderingThread(this);
         mThread.start();
-
     }
 
     @Override
-    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+    public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surface, int width, int height) {
         // Ignored
         Log.v(TAG, "onSurfaceTextureSizeChanged");
     }
 
     @Override
-    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+    public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surface) {
         Log.v(TAG, "onSurfaceTextureDestroyed");
         if (mThread != null) mThread.stopRendering();
         return true;
-
     }
 
     @Override
-    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+    public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surface) {
         //Log.v(TAG,  "onSurfaceTextureUpdated");  //this is called a lot!
         // Ignored
     }
 
     /*
      * Thread to draw a green square moving around the textureView.
-    */
+     */
     class RenderingThread extends Thread {
         private final TextureView mSurface;
         private volatile boolean mRunning = true;

@@ -1,27 +1,27 @@
 package edu.cs4730.textureviewdemo;
 
+import androidx.annotation.NonNull;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.SurfaceTexture;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Gravity;
 import android.view.TextureView;
 import android.widget.FrameLayout;
 
 
-/*
+/**
  * original example from  here: http://pastebin.com/J4uDgrZ8  with much thanks.
- *
- *  Everything for the texture in in the MainActivity.  And a generic textureView is used
- *
- *
+ * Everything for the texture in in the MainActivity.  And a generic textureView is used
  */
 
 public class AllinOneActivity extends AppCompatActivity implements TextureView.SurfaceTextureListener {
-
 
     private TextureView mTextureView;
     private RenderingThread mThread;
@@ -42,31 +42,30 @@ public class AllinOneActivity extends AppCompatActivity implements TextureView.S
         //add the TextureView to our layout from above.
         content.addView(mTextureView, new FrameLayout.LayoutParams(500, 500, Gravity.CENTER));
         setContentView(content);
-
     }
 
-    /*
+    /**
      * TextureView.SurfaceTextureListener overrides below, that start up the drawing thread.
      */
     @Override
-    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+    public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surface, int width, int height) {
         mThread = new RenderingThread(mTextureView);
         mThread.start();
     }
 
     @Override
-    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+    public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surface, int width, int height) {
         // Ignored
     }
 
     @Override
-    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+    public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surface) {
         if (mThread != null) mThread.stopRendering();
         return true;
     }
 
     @Override
-    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+    public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surface) {
         // Ignored
     }
 
