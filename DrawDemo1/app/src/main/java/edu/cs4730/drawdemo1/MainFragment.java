@@ -1,6 +1,7 @@
 package edu.cs4730.drawdemo1;
 
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -8,7 +9,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,7 +26,6 @@ import android.widget.Spinner;
 
 /**
  * This is a simple example to show how each of the canvas drawing works.
- *
  */
 public class MainFragment extends Fragment {
 
@@ -41,11 +43,6 @@ public class MainFragment extends Fragment {
     Paint myColor;
     ColorList myColorList = new ColorList();
     Bitmap alien;
-
-
-    public MainFragment() {
-        // Required empty public constructor
-    }
 
 
     @Override
@@ -77,9 +74,9 @@ public class MainFragment extends Fragment {
         //setup the spinner
         String[] list = {"Point", "Line", "Rect", "Circle", "Arc", "Oval", "Pic", "Text"};
         //first we will work on the spinner1 (which controls the seekbar)
-        mySpinner = (Spinner) myView.findViewById(R.id.spinner);
+        mySpinner = myView.findViewById(R.id.spinner);
         //create the ArrayAdapter of strings from my List.
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, list);
         //set the dropdown layout
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //finally set the adapter to the spinner
@@ -125,9 +122,9 @@ public class MainFragment extends Fragment {
     }
 
     /*
-    * TouchListener will draw a square on the image where "touched".
-    * If doing an animated clear, it will return without doing anything.
-    */
+     * TouchListener will draw a square on the image where "touched".
+     * If doing an animated clear, it will return without doing anything.
+     */
     class myTouchListener implements View.OnTouchListener {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -135,8 +132,7 @@ public class MainFragment extends Fragment {
             //We just need the x and y position, to draw on the canvas
             //so, retrieve the new x and y touch positions
             if (event.getAction() == MotionEvent.ACTION_UP) { //fake it for tap.
-
-
+                v.performClick();
                 drawBmp((int) event.getX(), (int) event.getY());
                 return true;
             }
@@ -208,7 +204,7 @@ public class MainFragment extends Fragment {
                 }
                 break;
             case 6: //"Pic"
-                theboardc.drawBitmap(alien,x,y,myColor);
+                theboardc.drawBitmap(alien, x, y, myColor);
                 break;
             case 7: // "Text"
                 theboardc.drawText("Hi there", x, y, myColor);

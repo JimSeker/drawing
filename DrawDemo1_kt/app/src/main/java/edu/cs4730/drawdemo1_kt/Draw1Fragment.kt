@@ -43,7 +43,7 @@ class Draw1Fragment : Fragment() {
 
         //Simple clear button, reset the image to white.
         btnClear = myView.findViewById<View>(R.id.button2) as Button
-        btnClear!!.setOnClickListener {
+        btnClear.setOnClickListener {
             theboardc!!.drawColor(Color.WHITE) //background color for the board.
             refreshBmp()
         }
@@ -118,6 +118,7 @@ class Draw1Fragment : Fragment() {
             //so, retrieve the new x and y touch positions
             if (event.action == MotionEvent.ACTION_UP) { //fake it for tap.
                 drawBmp(event.x, event.y, MotionEvent.ACTION_UP)
+                v.performClick()
             } else if (event.action == MotionEvent.ACTION_MOVE) { //fake it for tap.
                 drawBmp(event.x, event.y, MotionEvent.ACTION_MOVE)
                 return true

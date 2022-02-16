@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         //this ia the support Navigation view.
         mNavigationView = findViewById<View>(R.id.navview) as NavigationView
 
-        //setup a listener, which acts very similiar to how menus are handled.
+        //setup a listener, which acts very similar to how menus are handled.
         mNavigationView.setNavigationItemSelectedListener(NavigationView.OnNavigationItemSelectedListener { menuItem -> //we could just as easily call onOptionsItemSelected(menuItem) and how it deal with it.
             val id = menuItem.itemId
             if (id == R.id.drawing) {
@@ -117,23 +117,6 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.container, MainFragment()).commit()
         }
 
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-        return if (id == R.id.action_settings) {
-            true
-        } else super.onOptionsItemSelected(item)
     }
 
     /**

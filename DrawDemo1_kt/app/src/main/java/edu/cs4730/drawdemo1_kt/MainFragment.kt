@@ -23,7 +23,7 @@ class MainFragment : Fragment() {
     lateinit var btnNColor: Button
     lateinit var mySpinner: Spinner
     var which = 1
-    val boardsize = 960
+    val boardsize = 480
 
     //for drawing
     var firstx = 0f
@@ -118,6 +118,7 @@ class MainFragment : Fragment() {
             //so, retrieve the new x and y touch positions
             if (event.action == MotionEvent.ACTION_UP) { //fake it for tap.
                 drawBmp(event.x, event.y)
+                v.performClick()
                 return true
             }
             return false

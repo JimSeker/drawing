@@ -1,6 +1,6 @@
 package edu.cs4730.drawdemo1;
 
-
+import androidx.annotation.NonNull;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,9 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -25,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import androidx.fragment.app.Fragment;
 
 /**
  * This uses an animated clear button, instead of just clearing it.
@@ -51,11 +49,6 @@ public class AnDrawFragment extends Fragment {
     //for the thread
     Thread myThread;
 
-    public AnDrawFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -63,7 +56,7 @@ public class AnDrawFragment extends Fragment {
         View myView = inflater.inflate(R.layout.fragment_andraw, container, false);
 
         //Simple clear button, reset the image to white.
-        btnClear = (Button) myView.findViewById(R.id.button2);
+        btnClear = myView.findViewById(R.id.button2);
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +65,7 @@ public class AnDrawFragment extends Fragment {
         });
 
         //changes to the next color in the list
-        btnNColor = (Button) myView.findViewById(R.id.button3);
+        btnNColor = myView.findViewById(R.id.button3);
         btnNColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,7 +123,7 @@ public class AnDrawFragment extends Fragment {
         //message handler for the animation.
         handler = new Handler(Looper.getMainLooper()) {
             @Override
-            public void handleMessage(Message msg) {
+            public void handleMessage(@NonNull Message msg) {
                 if (msg.what == 0) { //redraw image
                     if (theboard != null && theboardfield != null) {
                         refreshBmp();
@@ -158,7 +151,7 @@ public class AnDrawFragment extends Fragment {
             //so, retrieve the new x and y touch positions
             if (event.getAction() == MotionEvent.ACTION_UP) { //fake it for tap.
                 drawBmp((int) event.getX(), (int) event.getY(), MotionEvent.ACTION_UP);
-
+                v.performClick();  //this should be called only ACTION_UP, but can be called for others.
             } else if (event.getAction() == MotionEvent.ACTION_MOVE) { //fake it for tap.
 
                 drawBmp((int) event.getX(), (int) event.getY(), MotionEvent.ACTION_MOVE);
@@ -167,7 +160,6 @@ public class AnDrawFragment extends Fragment {
             return false;
         }
     }
-
 
     void drawBmp(float x, float y, int eventcode) {
         //"Point", "Line", "Rect", "Circle", "Arc", "Oval", "Pic", "Text"
@@ -308,7 +300,7 @@ public class AnDrawFragment extends Fragment {
     /**
      * this is an thread, so it can run the "animated" clear button"
      * So it draws a line with the current color down the image, and then white back up to clear
-     *
+     * <p>
      * Since this is a sub class, it has access to all the "global" variables.  But it's a thread
      * so it can't change the widgets.  That's what the handler does.  When a new image is ready
      * it sends a message to the handler that is on the main thread.  The handler then updates the

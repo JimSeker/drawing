@@ -53,7 +53,7 @@ public class Draw1Fragment extends Fragment {
         View myView = inflater.inflate(R.layout.fragment_draw1, container, false);
 
         //Simple clear button, reset the image to white.
-        btnClear = (Button) myView.findViewById(R.id.button2);
+        btnClear = myView.findViewById(R.id.button2);
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,7 +63,7 @@ public class Draw1Fragment extends Fragment {
         });
 
         //changes to the next color in the list
-        btnNColor = (Button) myView.findViewById(R.id.button3);
+        btnNColor = myView.findViewById(R.id.button3);
         btnNColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +77,7 @@ public class Draw1Fragment extends Fragment {
         //first we will work on the spinner1 (which controls the seekbar)
         mySpinner = (Spinner) myView.findViewById(R.id.spinner);
         //create the ArrayAdapter of strings from my List.
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, list);
         //set the dropdown layout
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //finally set the adapter to the spinner
@@ -134,9 +134,8 @@ public class Draw1Fragment extends Fragment {
             //so, retrieve the new x and y touch positions
             if (event.getAction() == MotionEvent.ACTION_UP) { //fake it for tap.
                 drawBmp((int) event.getX(), (int) event.getY(), MotionEvent.ACTION_UP);
-
+                v.performClick();
             } else if (event.getAction() == MotionEvent.ACTION_MOVE) { //fake it for tap.
-
                 drawBmp((int) event.getX(), (int) event.getY(), MotionEvent.ACTION_MOVE);
                 return true;
             }

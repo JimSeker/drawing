@@ -121,6 +121,7 @@ class AsycDrawFragment : Fragment() {
             //We just need the x and y position, to draw on the canvas
             //so, retrieve the new x and y touch positions
             if (event.action == MotionEvent.ACTION_UP) { //fake it for tap.
+                v.performClick()
                 drawBmp(event.x , event.y )
                 return true
             }
