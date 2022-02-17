@@ -1,6 +1,7 @@
 package edu.cs4730.graphicoverlaydemo;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,11 +18,7 @@ public class MultiFragment extends Fragment {
 
     TextView tv5;
 
-    public MultiFragment() {
-        // Required empty public constructor
-    }
-
-
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -40,6 +37,7 @@ public class MultiFragment extends Fragment {
                         break;
                     case MotionEvent.ACTION_UP:
                         tv5.setText("Can't draw here!");
+                        v.performClick();
                         break;
                 }
                 return false;

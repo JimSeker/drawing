@@ -1,5 +1,6 @@
 package edu.cs4730.graphicoverlaydemo;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -47,6 +48,7 @@ public class GraphicOverLayDraw extends View {
         myPath = new Path();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
@@ -63,6 +65,7 @@ public class GraphicOverLayDraw extends View {
                 break;
             case MotionEvent.ACTION_UP:
                 myPath.lineTo(x,y);
+                performClick();
                 break;
         }
 
