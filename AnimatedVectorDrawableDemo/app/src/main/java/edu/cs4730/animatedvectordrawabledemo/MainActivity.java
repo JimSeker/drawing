@@ -10,6 +10,8 @@ import android.widget.ImageView;
 /**
  * and attempt at a animated vector demo.   it sort of works.
  * second one is from https://stories.uplabs.com/animated-icons-on-android-ee635307bd6 that works much better.
+ *
+ * Note, the sytle is left as light, because you can't see anything in a dark theme.
  */
 
 public class MainActivity extends AppCompatActivity {
