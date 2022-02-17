@@ -18,7 +18,7 @@ import java.util.Vector;
 /**
  * This code implements a basic space like invaders game.   The code to move the aliens is in
  * the process of being rewritten, but I'm still not sure I shouldn't just burn it and start over.
- *
+ * <p>
  * The rest of the code should be pretty good at this point with minor fixes needed here and
  * there.
  */
@@ -272,29 +272,30 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         float x = event.getX();
         float y = event.getY();
 
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                if (y > bottom) { //below playing area
-                    if (x < leftbtn) { //left
-                        moveship = -shipmove;  //and yet this seems to be dpi independent, I think... why?
-                    } else if (x < firebtn) { //fire
-                        tofire = true;
-                    } else if (x <= rightbtn) {
-                        moveship = shipmove;
-                    }
-                    return true;
+        if (action == MotionEvent.ACTION_DOWN) {
+            if (y > bottom) { //below playing area
+                if (x < leftbtn) { //left
+                    moveship = -shipmove;  //and yet this seems to be dpi independent, I think... why?
+                } else if (x < firebtn) { //fire
+                    tofire = true;
+                } else if (x <= rightbtn) {
+                    moveship = shipmove;
                 }
-            case MotionEvent.ACTION_UP:  //stop moving left or right.  user has lifted their finger.
-                if (y > bottom) { //below playing area
-                    if (x < leftbtn) { //left
-                        moveship = 0;
-                    } else if (x < firebtn) { //don't care about fire, handled in down.
-                        return true;
-                    } else if (x <= rightbtn) {
-                        moveship = 0;
-                    }
+                return true;
+            }
+        } else if (action == MotionEvent.ACTION_UP) { //stop moving left or right.  user has lifted their finger.
+            performClick();
+            if (y > bottom) { //below playing area
+                if (x < leftbtn) { //left
+                    moveship = 0;
+                } else if (x < firebtn) { //don't care about fire, handled in down.
                     return true;
+                } else if (x <= rightbtn) {
+                    moveship = 0;
                 }
+                return true;
+            }
+
         }
         return false;
     }
@@ -310,7 +311,6 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         // setup the background picture.
         Log.v(TAG, "size is width=" + getWidth() + " height is " + getHeight());
         setupBG(getWidth(), getHeight());
-
 
         thread = new myThread(getHolder(), this);
         thread.setRunning(true);
