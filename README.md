@@ -30,9 +30,14 @@ Android Drawing Examples
 
 `GraphicOverlayDemo_kt` (kotlin) is an example of how to create a customview to draw on other views.
 
-`SurfaceViewDemo` uses a surfaceview.  Since a surface is for "animated" drawing, an alien moves accross the screen.  The user touches it and it moves to a new location. It shows to use an extended surfaceview or all it in the activity.
+`SurfaceViewDemo` (java) uses a surfaceview.  Since a surface is for "animated" drawing, an alien moves across the screen.  The user touches it and it moves to a new location. It shows to use an extended surfaceview or all it in the activity.
 
-`TextureViewDemo` is an example of how to draw on a surface (via a canvas) of a TextureView.  It uses a thread to update the moving block.  It shows to use an extended textureView and how use all the code in the main.  (same example as the surfaceViewDemo)
+`SurfaceViewDemo_kt` (kotlin) uses a surfaceview.  Since a surface is for "animated" drawing, an alien moves across the screen.  The user touches it and it moves to a new location. It shows to use an extended surfaceview or all it in the activity.
+
+`TextureViewDemo` (java) is an example of how to draw on a surface (via a canvas) of a TextureView.  It uses a thread to update the moving block.  It shows to use an extended textureView and how use all the code in the main.  (same example as the surfaceViewDemo)
+
+`TextureViewDemo_kt` (kotlin) is an example of how to draw on a surface (via a canvas) of a TextureView.  It uses a thread to update the moving block.  It shows to use an extended textureView and how use all the code in the main.  (same example as the surfaceViewDemo)
+
 
 ---
 
