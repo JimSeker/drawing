@@ -1,35 +1,34 @@
 Android Drawing Examples
 ===========
-<b>eclipse/</b> has the eclipse projects, no longer updated.  Everything else is in andriod studio
+`eclipse/` has the eclipse projects, no longer updated.  Everything else is in android studio
 
-<b>DrawDemo1</b> (java) uses a canvas from a imageview to draw on.  There are 4 fragments.  main draws different types of objects, based on a spinner and some need two taps to be drawn like a line.  there is a animated fragments to clear an uses a thread, asyc uses a aysctask. draw1 only draws one object on the screen.
+`legacy/` no longer updated code.  see readme.
 
-<b>DrawDemo1_tk</b> (kotlin) uses a canvas from a imageview to draw on.  There are 4 fragments.  main draws different types of objects, based on a spinner and some need two taps to be drawn like a line.  there is a animated fragments to clear an uses a thread, asyc uses a aysctask. draw1 only draws one object on the screen.
+`AlienInvaders` (java) is a very simple space invaders like game using a surfaceview.
 
-<b>drawDemo2</b> (java) uses a customview to draw on a canvas.  There is also a touch listener, to draw blocks.
+`AlienInvaders_kt` (kotlin) is a very simple space invaders like game using a surfaceview.  Note, some non android classes are still java.
 
-<b>drawDemo2_tk</b> (kotlin) uses a customview to draw on a canvas.  There is also a touch listener, to draw blocks.
+`AnimatedGifDemo` shows how to use the animated Drawable class to have animated gifs.  NOTE: api 28+
 
-<b>AlienInvaders</b> is a very simple space invaders like game using a surfaceview.
+`AnimatedVectorDrawableDemo` show how to use Vector graphics animate them.  uses the androidx.vectordrawable
 
-<b>GraphicOverlayDemo</b> is an example of how to create a customview to draw on other views.
+`DrawDemo1` (java) uses a canvas from a imageview to draw on.  There are 4 fragments.  main draws different types of objects, based on a spinner and some need two taps to be drawn like a line.  there is a animated fragments to clear an uses a thread, asyc uses a aysctask. draw1 only draws one object on the screen.
 
-<b>SurfaceViewDemo</b> uses a surfaceview.  Since a surface is for "animated" drawing, an alien moves accross the screen.  The user touches it and it moves to a new location. It shows to use an extended surfaceview or all it in the activity.
+`DrawDemo1_tk` (kotlin) uses a canvas from a imageview to draw on.  There are 4 fragments.  main draws different types of objects, based on a spinner and some need two taps to be drawn like a line.  there is a animated fragments to clear an uses a thread, asyc uses a aysctask. draw1 only draws one object on the screen.
 
-<b>TextureViewDemo</b> is an example of how to draw on a surface (via a canvas) of a TextureView.  It uses a thread to update the moving block.  It shows to use an extended textureView and how use all the code in the main.  (same example as the surfaceViewDemo)
+`drawDemo2` (java) uses a customview to draw on a canvas.  There is also a touch listener, to draw blocks.
 
-<b>FlappyAlien</b> is a simple FlappyBird clone, to show how a game work work on a TextureView.
+`drawDemo2_tk` (kotlin) uses a customview to draw on a canvas.  There is also a touch listener, to draw blocks.
 
+`FlappyAlien` is a simple FlappyBird clone, to show how a game work work on a TextureView.
 
-<a>AnimatedGifDemo</b> shows how to use the animated Drawable class to have animated gifs.  NOTE: api 28+
+`GraphicOverlayDemo` is an example of how to create a customview to draw on other views.
 
-<b>AnimatedVectorDrawableDemo</b> show how to use Vector graphics animate them.  uses the androidx.vectordrawable
+`SurfaceViewDemo` uses a surfaceview.  Since a surface is for "animated" drawing, an alien moves accross the screen.  The user touches it and it moves to a new location. It shows to use an extended surfaceview or all it in the activity.
 
-<b>legacy</b> no longer updated code.<br>
-DrawDemo uses a canvas to draw on, then display via an imageview and  is no longer updated<BR>
-svtest is a very simple SurfaceView to draw and "animate" a moving box and is no longer updated.<BR>
-gameAnd is a simple game and with broken surfaceView demo code.
+`TextureViewDemo` is an example of how to draw on a surface (via a canvas) of a TextureView.  It uses a thread to update the moving block.  It shows to use an extended textureView and how use all the code in the main.  (same example as the surfaceViewDemo)
 
+---
 
-These are example code for University of Wyoming, Cosc 4730 Mobile Programming course.
+These are example code for University of Wyoming, Cosc 4730 Mobile Programming course and cosc 4735 Advance Mobile Programing course. 
 All examples are for Android.
