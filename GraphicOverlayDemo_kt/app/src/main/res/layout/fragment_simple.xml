@@ -1,0 +1,25 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.cs4730.graphicoverlaydemo_kt.SimpleFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Lorem ipsum dolor sit amet, eu vel magna alterum, novum efficiendi ad mei, id aperiri antiopam sit. In nam aeque legimus omittantur, vix populo quodsi assueverit ei. Ut populo prompta reprehendunt cum, vidit nominavi te cum. Mei id augue prodesset interesset, meliore pertinacia nam te. Reque facer tollit duo an. Sit ex perfecto posidonium percipitur, qui cu discere laboramus prodesset.
+
+Quem dolorum eu pro, in rebum sanctus nec, melius feugait accusam vel et. Duo natum salutandi ne, id inimicus electram aliquando quo. Omnes debitis at has, nam eligendi insolens ex. At odio inani invenire eos, quo facete adolescens scriptorem ex. Ne usu quod nostro vocibus, id appetere mnesarchum vix, nam laudem electram salutatus an.
+
+Ne vel solet singulis. Quem ridens eam ne, no sit luptatum quaestio, ius ea commodo ancillae. An munere gloriatur moderatius duo. Te labore facete interesset mea, agam senserit ex ius, in pro ferri noster. Ius ex audire fabulas ceteros, quando animal intellegam ex per. Id duo esse diceret gubergren, te est clita putent mentitum.
+
+Eu dico simul deserunt vix, quo at elitr convenire, mei audiam veritus facilisi cu. Harum molestie eu mel, vis eu option aliquam. Ei everti dolores tractatos per, erant dicam aperiam ut per. Mel ei affert nullam, in sed fierent insolens. Rebum tritani delenit in eum, cu libris deleniti usu.
+
+Ea quo quaestio sensibus periculis, sed exerci volutpat cu. Id noster commune definitionem eos. Qui ea harum temporibus complectitur, vel ex copiosae aliquando neglegentur. Integre malorum ius et, mea alii ferri at, prima modus legendos at eos. An vim sapientem voluptatibus. Ea liber senserit his, eam cu justo error." />
+
+    <edu.cs4730.graphicoverlaydemo_kt.GraphicOverLayDraw
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</FrameLayout>

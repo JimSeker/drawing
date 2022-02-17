@@ -12,7 +12,9 @@ Android Drawing Examples
 
 `AnimatedGifDemo_kt` (kotlin) shows how to use the animated Drawable class to have animated gifs.  NOTE: api 28+
 
-`AnimatedVectorDrawableDemo` show how to use Vector graphics animate them.  uses the androidx.vectordrawable
+`AnimatedVectorDrawableDemo` (java) show how to use Vector graphics animate them.  uses the androidx.vectordrawable
+
+`AnimatedVectorDrawableDemo` (kotlin) show how to use Vector graphics animate them.  uses the androidx.vectordrawable
 
 `DrawDemo1` (java) uses a canvas from a imageview to draw on.  There are 4 fragments.  main draws different types of objects, based on a spinner and some need two taps to be drawn like a line.  there is a animated fragments to clear an uses a thread, asyc uses a aysctask. draw1 only draws one object on the screen.
 
@@ -24,7 +26,9 @@ Android Drawing Examples
 
 `FlappyAlien` is a simple FlappyBird clone, to show how a game work work on a TextureView.
 
-`GraphicOverlayDemo` is an example of how to create a customview to draw on other views.
+`GraphicOverlayDemo` (java) is an example of how to create a customview to draw on other views.
+
+`GraphicOverlayDemo_kt` (kotlin) is an example of how to create a customview to draw on other views.
 
 `SurfaceViewDemo` uses a surfaceview.  Since a surface is for "animated" drawing, an alien moves accross the screen.  The user touches it and it moves to a new location. It shows to use an extended surfaceview or all it in the activity.
 
