@@ -8,17 +8,19 @@ Android Drawing Examples
 
 `AlienInvaders_kt` (kotlin) is a very simple space invaders like game using a surfaceview.  Note, some non android classes are still java.
 
-`AnimatedGifDemo` shows how to use the animated Drawable class to have animated gifs.  NOTE: api 28+
+`AnimatedGifDemo` (java) shows how to use the animated Drawable class to have animated gifs.  NOTE: api 28+
+
+`AnimatedGifDemo_kt` (kotlin) shows how to use the animated Drawable class to have animated gifs.  NOTE: api 28+
 
 `AnimatedVectorDrawableDemo` show how to use Vector graphics animate them.  uses the androidx.vectordrawable
 
 `DrawDemo1` (java) uses a canvas from a imageview to draw on.  There are 4 fragments.  main draws different types of objects, based on a spinner and some need two taps to be drawn like a line.  there is a animated fragments to clear an uses a thread, asyc uses a aysctask. draw1 only draws one object on the screen.
 
-`DrawDemo1_tk` (kotlin) uses a canvas from a imageview to draw on.  There are 4 fragments.  main draws different types of objects, based on a spinner and some need two taps to be drawn like a line.  there is a animated fragments to clear an uses a thread, asyc uses a aysctask. draw1 only draws one object on the screen.
+`DrawDemo1_kt` (kotlin) uses a canvas from a imageview to draw on.  There are 4 fragments.  main draws different types of objects, based on a spinner and some need two taps to be drawn like a line.  there is a animated fragments to clear an uses a thread, asyc uses a aysctask. draw1 only draws one object on the screen.
 
 `drawDemo2` (java) uses a customview to draw on a canvas.  There is also a touch listener, to draw blocks.
 
-`drawDemo2_tk` (kotlin) uses a customview to draw on a canvas.  There is also a touch listener, to draw blocks.
+`drawDemo2_kt` (kotlin) uses a customview to draw on a canvas.  There is also a touch listener, to draw blocks.
 
 `FlappyAlien` is a simple FlappyBird clone, to show how a game work work on a TextureView.
 
