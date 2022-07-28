@@ -1,6 +1,9 @@
 package edu.cs4730.alieninvaders;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
@@ -11,5 +14,7 @@ public class MainActivity extends AppCompatActivity {
         // no layout used, since using mySurfaceView
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(new mySurfaceView(this));
+
+        Bitmap alien1Bmp = BitmapFactory.decodeResource(getResources(), R.drawable.alien);
     }
 }
