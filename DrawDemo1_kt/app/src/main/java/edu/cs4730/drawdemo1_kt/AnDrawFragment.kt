@@ -1,7 +1,6 @@
 package edu.cs4730.drawdemo1_kt
 
 import android.graphics.*
-import edu.cs4730.drawdemo1_kt.ColorList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.os.Bundle
@@ -9,7 +8,6 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.Log
-import edu.cs4730.drawdemo1_kt.R
 import android.view.View.OnTouchListener
 import android.view.MotionEvent
 import android.view.View
@@ -53,13 +51,13 @@ class AnDrawFragment : Fragment() {
         val myView = inflater.inflate(R.layout.fragment_andraw, container, false)
 
         //Simple clear button, reset the image to white.
-        btnClear = myView.findViewById<View>(R.id.button2) as Button
+        btnClear = myView.findViewById<View>(R.id.clear) as Button
         btnClear.setOnClickListener {
             startThread() //done to simply a few things.
         }
 
         //changes to the next color in the list
-        btnNColor = myView.findViewById<View>(R.id.button3) as Button
+        btnNColor = myView.findViewById<View>(R.id.next) as Button
         btnNColor.setOnClickListener {
             myColorList.next()
             myColor!!.color = myColorList.getNum()

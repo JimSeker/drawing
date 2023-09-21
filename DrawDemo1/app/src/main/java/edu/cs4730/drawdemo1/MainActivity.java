@@ -1,109 +1,51 @@
 package edu.cs4730.drawdemo1;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.navigation.NavigationView;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
 import android.view.MenuItem;
 
-/*
-* while there is alot of code here, the example is actually all in the fragments.
-* this is just to get the drawer layout working.
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import edu.cs4730.drawdemo1.databinding.ActivityMainBinding;
+
+/**
+ * while there is alot of code here, the example is actually all in the fragments.
+ * this is just to get the bottom navigation bar  work.
  */
 
-
 public class MainActivity extends AppCompatActivity {
-    private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout mDrawerlayout;
-    private NavigationView mNavigationView;
-
+    ActivityMainBinding binding;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // enable ActionBar app icon to behave as action to toggle nav drawer
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
-        //standard navigation drawer setup.
-        mDrawerlayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        mDrawerToggle = new ActionBarDrawerToggle(this,  // host activity
-                mDrawerlayout,  //drawerlayout object
-                toolbar,  //toolbar
-                R.string.drawer_open,  //open drawer description  required!
-                R.string.drawer_close) {  //closed drawer description
-
-            //called once the drawer has closed.
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Categories");
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            //called when the drawer is now open.
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                getSupportActionBar().setTitle(R.string.app_name);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
-        //To disable the icon for the drawer, change this to false
-        //mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawerlayout.addDrawerListener(mDrawerToggle);
-
-        //this ia the support Navigation view.
-        mNavigationView = (NavigationView) findViewById(R.id.navview);
-        //setup a listener, which acts very similiar to how menus are handled.
-        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.toolbar);
+        
+        //setup a listener, which acts very similar to how menus are handled.
+        binding.navView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                //we could just as easily call onOptionsItemSelected(menuItem) and how it deal with it.
-                //Log.v(TAG, "We got someting?");
                 int id = menuItem.getItemId();
                 if (id == R.id.drawing) {
-                    //load fragment
-      //              if (!menuItem.isChecked()) {  //only need to do this if fragment is already loaded.
-                        menuItem.setChecked(true);  //make sure to check/highlight the item.
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, new MainFragment()).commit();
-    //                }
-                    mDrawerlayout.closeDrawers();  //close the drawer, since the user has selected it.
+                    getSupportFragmentManager().beginTransaction().replace(binding.container.getId(), new MainFragment()).commit();
+                    menuItem.setChecked(true);  //make sure to check/highlight the item.
                     return true;
                 } else if (id == R.id.drawing1) {
-                    //load fragment
-  //                  if (!menuItem.isChecked()) {  //only need to do this if fragment is already loaded.
-                        menuItem.setChecked(true); //make sure the item is checked/highlighted
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, new Draw1Fragment()).commit();
-//                    }
-                    //now close the nav drawer.
-                    mDrawerlayout.closeDrawers();
+                    menuItem.setChecked(true); //make sure the item is checked/highlighted
+                    getSupportFragmentManager().beginTransaction().replace(binding.container.getId(), new Draw1Fragment()).commit();
                     return true;
-                }else if (id == R.id.andraw) {
-                    //load fragment
-
-                        menuItem.setChecked(true); //make sure the item is checked/highlighted
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, new AnDrawFragment()).commit();
-                    //now close the nav drawer.
-                    mDrawerlayout.closeDrawers();
+                } else if (id == R.id.andraw) {
+                    getSupportFragmentManager().beginTransaction().replace(binding.container.getId(), new AnDrawFragment()).commit();
+                    menuItem.setChecked(true); //make sure the item is checked/highlighted
                     return true;
-                }else if (id == R.id.asdraw) {
-                    //load fragment
+                } else if (id == R.id.asdraw) {
 
                     menuItem.setChecked(true); //make sure the item is checked/highlighted
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, new AsycDrawFragment()).commit();
-                    //now close the nav drawer.
-                    mDrawerlayout.closeDrawers();
+                    getSupportFragmentManager().beginTransaction().replace(binding.container.getId(), new AsycDrawFragment()).commit();
                     return true;
                 }
                 return false;
@@ -112,26 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new MainFragment()).commit();
+                    .add(binding.container.getId(), new MainFragment()).commit();
         }
-    }
-
-    /**
-     * When using the ActionBarDrawerToggle, you must call it during
-     * onPostCreate() and onConfigurationChanged()...
-     */
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggls
-        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 }

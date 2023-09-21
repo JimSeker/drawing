@@ -1,7 +1,5 @@
 package edu.cs4730.drawdemo1;
 
-
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -21,7 +19,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
+
+import edu.cs4730.drawdemo1.databinding.FragmentMainBinding;
 
 
 /**
@@ -29,11 +28,11 @@ import android.widget.Spinner;
  */
 public class MainFragment extends Fragment {
 
-    ImageView theboardfield;
+    FragmentMainBinding binding;
     Bitmap theboard;
     Canvas theboardc;
-    Button btnClear, btnNColor;
-    Spinner mySpinner;
+    //Button btnClear, btnNColor;
+    //Spinner mySpinner;
     int which = 1;
     final int boardsize = 480;
     //for drawing
@@ -46,14 +45,12 @@ public class MainFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View myView = inflater.inflate(R.layout.fragment_main, container, false);
+        binding = FragmentMainBinding.inflate(inflater, container, false);
 
         //Simple clear button, reset the image to white.
-        btnClear = (Button) myView.findViewById(R.id.button2);
-        btnClear.setOnClickListener(new View.OnClickListener() {
+        binding.clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 theboardc.drawColor(Color.WHITE);  //background color for the board.
@@ -62,8 +59,7 @@ public class MainFragment extends Fragment {
         });
 
         //changes to the next color in the list
-        btnNColor = (Button) myView.findViewById(R.id.button3);
-        btnNColor.setOnClickListener(new View.OnClickListener() {
+        binding.next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myColorList.next();
@@ -74,15 +70,14 @@ public class MainFragment extends Fragment {
         //setup the spinner
         String[] list = {"Point", "Line", "Rect", "Circle", "Arc", "Oval", "Pic", "Text"};
         //first we will work on the spinner1 (which controls the seekbar)
-        mySpinner = myView.findViewById(R.id.spinner);
         //create the ArrayAdapter of strings from my List.
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, list);
         //set the dropdown layout
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //finally set the adapter to the spinner
-        mySpinner.setAdapter(adapter);
+        binding.spinner.setAdapter(adapter);
         //set the selected listener as well
-        mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        binding.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 which = position;
@@ -99,12 +94,11 @@ public class MainFragment extends Fragment {
 
         //get the imageview and create a bitmap to put in the imageview.
         //also create the canvas to draw on.
-        theboardfield = (ImageView) myView.findViewById(R.id.boardfield);
         theboard = Bitmap.createBitmap(boardsize, boardsize, Bitmap.Config.ARGB_8888);
         theboardc = new Canvas(theboard);
         theboardc.drawColor(Color.WHITE);  //background color for the board.
-        theboardfield.setImageBitmap(theboard);
-        theboardfield.setOnTouchListener(new myTouchListener());
+        binding.boardfield.setImageBitmap(theboard);
+        binding.boardfield.setOnTouchListener(new myTouchListener());
 
         //For drawing
 
@@ -118,7 +112,7 @@ public class MainFragment extends Fragment {
         alien = BitmapFactory.decodeResource(getResources(), R.drawable.alien);
         //draw it on the screen.
         //theboardc.drawBitmap(alien, null, new Rect(0, 0, 300, 300), myColor);
-        return myView;
+        return binding.getRoot();
     }
 
     /*
@@ -196,7 +190,6 @@ public class MainFragment extends Fragment {
 
                     first = false;
                 } else {
-
                     myRecF.bottom = y;
                     myRecF.right = x;
                     theboardc.drawOval(myRecF, myColor);
@@ -211,17 +204,14 @@ public class MainFragment extends Fragment {
                 break;
             default:
                 Log.v("hi", "NOT working? " + which);
-
-
         }
-
-        theboardfield.setImageBitmap(theboard);
-        theboardfield.invalidate();
+        binding.boardfield.setImageBitmap(theboard);
+        binding.boardfield.invalidate();
     }
 
     void refreshBmp() {
-        theboardfield.setImageBitmap(theboard);
-        theboardfield.invalidate();
+        binding.boardfield.setImageBitmap(theboard);
+        binding.boardfield.invalidate();
     }
 
 }

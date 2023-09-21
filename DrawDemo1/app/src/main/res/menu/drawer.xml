@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/drawing"
-        android:title="Draw All"
-        />
+        android:icon="@drawable/ic_all"
+        android:title="Draw All" />
     <item
         android:id="@+id/drawing1"
-        android:title="Draw One"
-        />
+        android:icon="@drawable/ic_one"
+        android:title="Draw One" />
     <item
         android:id="@+id/andraw"
-        android:title="Animation"
-        />
+        android:icon="@drawable/ic_anim"
+        android:title="Animation" />
     <item
         android:id="@+id/asdraw"
-        android:title="Async Animation"
-        />
+        android:icon="@drawable/ic_anim"
+        android:title="Async Animation" />
 </menu>

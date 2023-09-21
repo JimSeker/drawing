@@ -56,7 +56,7 @@ public class AnDrawFragment extends Fragment {
         View myView = inflater.inflate(R.layout.fragment_andraw, container, false);
 
         //Simple clear button, reset the image to white.
-        btnClear = myView.findViewById(R.id.button2);
+        btnClear = myView.findViewById(R.id.clear);
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +65,7 @@ public class AnDrawFragment extends Fragment {
         });
 
         //changes to the next color in the list
-        btnNColor = myView.findViewById(R.id.button3);
+        btnNColor = myView.findViewById(R.id.next);
         btnNColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

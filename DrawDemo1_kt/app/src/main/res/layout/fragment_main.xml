@@ -26,13 +26,13 @@
         android:gravity="center_horizontal">
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Clear" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Next Color" />

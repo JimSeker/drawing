@@ -42,7 +42,7 @@ class AsycDrawFragment : Fragment() {
         val myView = inflater.inflate(R.layout.fragment_asycdraw, container, false)
 
         //Simple clear button, reset the image to white.
-        btnClear = myView.findViewById<View>(R.id.button2) as Button
+        btnClear = myView.findViewById<View>(R.id.clear) as Button
         btnClear.setOnClickListener {
             isAnimation = true
             val task: animator = animator()
@@ -50,7 +50,7 @@ class AsycDrawFragment : Fragment() {
         }
 
         //changes to the next color in the list
-        btnNColor = myView.findViewById<View>(R.id.button3) as Button
+        btnNColor = myView.findViewById<View>(R.id.next) as Button
         btnNColor.setOnClickListener {
             myColorList.next()
             myColor!!.color = myColorList.getNum()

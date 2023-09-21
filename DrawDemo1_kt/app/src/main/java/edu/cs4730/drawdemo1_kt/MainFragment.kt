@@ -1,5 +1,6 @@
 package edu.cs4730.drawdemo1_kt
 
+import android.annotation.SuppressLint
 import android.graphics.*
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,18 +11,16 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
+import edu.cs4730.drawdemo1_kt.databinding.FragmentMainBinding
 
 /**
  * This is a simple example to show how each of the canvas drawing works.
  *
  */
 class MainFragment : Fragment() {
-    lateinit var theboardfield: ImageView
+    lateinit var binding: FragmentMainBinding
     lateinit var theboard: Bitmap
     lateinit var theboardc: Canvas
-    lateinit var btnClear: Button
-    lateinit var btnNColor: Button
-    lateinit var mySpinner: Spinner
     var which = 1
     val boardsize = 480
 
@@ -33,23 +32,22 @@ class MainFragment : Fragment() {
     var myColor: Paint? = null
     var myColorList = ColorList()
     lateinit var alien: Bitmap
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         // Inflate the layout for this fragment
-        val myView = inflater.inflate(R.layout.fragment_main, container, false)
+        binding = FragmentMainBinding.inflate(inflater, container, false)
 
         //Simple clear button, reset the image to white.
-        btnClear = myView.findViewById<View>(R.id.button2) as Button
-        btnClear.setOnClickListener {
+        binding.clear.setOnClickListener {
             theboardc.drawColor(Color.WHITE) //background color for the board.
             refreshBmp()
         }
 
         //changes to the next color in the list
-        btnNColor = myView.findViewById<View>(R.id.button3) as Button
-        btnNColor.setOnClickListener {
+        binding.next.setOnClickListener {
             myColorList.next()
             myColor!!.color = myColorList.getNum()
         }
@@ -57,20 +55,16 @@ class MainFragment : Fragment() {
         //setup the spinner
         val list = arrayOf("Point", "Line", "Rect", "Circle", "Arc", "Oval", "Pic", "Text")
         //first we will work on the spinner1 (which controls the seekbar)
-        mySpinner = myView.findViewById<View>(R.id.spinner) as Spinner
         //create the ArrayAdapter of strings from my List.
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, list)
         //set the dropdown layout
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         //finally set the adapter to the spinner
-        mySpinner.adapter = adapter
+        binding.spinner.adapter = adapter
         //set the selected listener as well
-        mySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View,
-                position: Int,
-                id: Long
+                parent: AdapterView<*>?, view: View, position: Int, id: Long
             ) {
                 which = position
                 first = true
@@ -85,13 +79,12 @@ class MainFragment : Fragment() {
 
         //get the imageview and create a bitmap to put in the imageview.
         //also create the canvas to draw on.
-        theboardfield = myView.findViewById<View>(R.id.boardfield) as ImageView
         theboard = Bitmap.createBitmap(boardsize, boardsize, Bitmap.Config.ARGB_8888)
         theboardc = Canvas(theboard)
         theboardc.drawColor(Color.WHITE) //background color for the board.
-        theboardfield.setImageBitmap(theboard)
-        theboardfield.invalidate()
-        theboardfield.setOnTouchListener(myTouchListener())
+        binding.boardfield.setImageBitmap(theboard)
+        binding.boardfield.invalidate()
+        binding.boardfield.setOnTouchListener(myTouchListener())
 
         //For drawing
         myColor = Paint() //default black
@@ -104,7 +97,7 @@ class MainFragment : Fragment() {
         alien = BitmapFactory.decodeResource(resources, R.drawable.alien)
         //draw it on the screen.
         //theboardc.drawBitmap(alien, null, new Rect(0, 0, 300, 300), myColor);
-        return myView
+        return binding.root
     }
 
     /*
@@ -130,7 +123,6 @@ class MainFragment : Fragment() {
         when (which) {
             0 -> theboardc.drawPoint(x, y, myColor!!)
             1 -> if (first) { //store the point for later
-
                 firstx = x
                 firsty = y
                 first = false
@@ -173,13 +165,12 @@ class MainFragment : Fragment() {
             7 -> theboardc.drawText("Hi there", x, y, myColor!!)
             else -> Log.v("hi", "NOT working? $which")
         }
-
-        theboardfield.setImageBitmap(theboard)
-        theboardfield.invalidate()
+        binding.boardfield.setImageBitmap(theboard)
+        binding.boardfield.invalidate()
     }
 
     fun refreshBmp() {
-        theboardfield.setImageBitmap(theboard)
-        theboardfield.invalidate()
+        binding.boardfield.setImageBitmap(theboard)
+        binding.boardfield.invalidate()
     }
 }
