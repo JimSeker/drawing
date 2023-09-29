@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "edu.cs4730.drawdemo2"
-        minSdkVersion 26
-        targetSdkVersion 32
+        minSdkVersion 28
+        targetSdk 33
         versionCode="1"
         versionName="1.0"
     }
@@ -17,9 +17,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    buildFeatures {
+        viewBinding = true
+    }
+    namespace 'edu.cs4730.drawdemo2'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
 }

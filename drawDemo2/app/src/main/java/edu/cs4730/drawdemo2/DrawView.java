@@ -88,9 +88,6 @@ public class DrawView extends View {
         myCircles[4].r = radius;
         myCircles[4].x = mwidth - radius;
         myCircles[4].y = mheight - radius;
-
-
-
     }
 
 
@@ -147,10 +144,7 @@ public class DrawView extends View {
         return false;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see android.view.View#onTouchEvent(android.view.MotionEvent)
-     *
+    /**
      * overrode this event to get all the touch events for this view.
      *
      */

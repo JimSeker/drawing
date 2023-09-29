@@ -6,20 +6,21 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import edu.cs4730.drawdemo2.databinding.ActivityMainBinding;
+
 /**
  * This demos a custom view.  There is almost nothing in this activity
  * except for a call to the customview to reset the grid from a menu item.
  */
 
 public class MainActivity extends AppCompatActivity {
-
-    DrawView dv;
+    ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        dv = findViewById(R.id.dv1);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
     }
 
     @Override
@@ -31,10 +32,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.reset:
-                dv.clearmaze();
-                return true;
+        if (item.getItemId() == R.id.reset) {
+            binding.dv1.clearmaze();
+            return true;
         }
         return false;
     }
