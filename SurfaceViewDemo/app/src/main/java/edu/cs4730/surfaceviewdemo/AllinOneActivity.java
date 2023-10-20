@@ -86,7 +86,7 @@ public class AllinOneActivity extends AppCompatActivity implements SurfaceHolder
         });
 
 
-        setContentView(mSurfaceView);
+        setContentView(mSurfaceView);  //the layout is the surfaceview, no xml or binding is needed.
     }
 
     //simple helper method to draw on the canvas.    (note in a SurfaceView, this is an overridden method.

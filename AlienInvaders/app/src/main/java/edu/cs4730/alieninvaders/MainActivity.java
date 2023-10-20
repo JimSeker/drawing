@@ -15,6 +15,5 @@ public class MainActivity extends AppCompatActivity {
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(new mySurfaceView(this));
 
-        Bitmap alien1Bmp = BitmapFactory.decodeResource(getResources(), R.drawable.alien);
     }
 }

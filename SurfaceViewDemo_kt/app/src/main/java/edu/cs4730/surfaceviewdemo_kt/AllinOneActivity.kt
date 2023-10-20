@@ -76,7 +76,7 @@ class AllinOneActivity : AppCompatActivity(), SurfaceHolder.Callback {
             }
             true
         }
-        setContentView(mSurfaceView)
+        setContentView(mSurfaceView)  //the layout is surfaceview, so binding or xml is needed here.
     }
 
     //simple helper method to draw on the canvas.    (note in a SurfaceView, this is an overridden method.

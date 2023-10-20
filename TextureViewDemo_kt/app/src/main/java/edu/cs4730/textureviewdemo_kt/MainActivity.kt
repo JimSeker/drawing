@@ -4,16 +4,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import edu.cs4730.textureviewdemo_kt.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        findViewById<View>(R.id.button).setOnClickListener {
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.button.setOnClickListener {
             startActivity(Intent(baseContext, AllinOneActivity::class.java))
         }
 
-        findViewById<View>(R.id.button2).setOnClickListener {
+        binding.button2.setOnClickListener {
             startActivity(Intent(baseContext, SeparateActivity::class.java))
         }
     }

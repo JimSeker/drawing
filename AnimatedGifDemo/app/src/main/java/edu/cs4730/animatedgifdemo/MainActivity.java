@@ -15,6 +15,8 @@ import android.widget.ImageView;
 
 import java.io.IOException;
 
+import edu.cs4730.animatedgifdemo.databinding.ActivityMainBinding;
+
 
 /**
  * Simple demo to load and display animated gifs.
@@ -25,17 +27,15 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     Drawable decodedAnimation, decodedAnimation2;
-    ImageView iva, iva2;
+    ActivityMainBinding binding;
     ColorFilter colorFilter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        iva = findViewById(R.id.imageView);
-        iva2 = findViewById(R.id.imageView2);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         //get the animated gif, but can't be on the main thread, so
         new Thread(new Runnable() {
@@ -63,11 +63,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         // set the drawable as image source of ImageView
-                        iva.setImageDrawable(decodedAnimation);
+                        binding.imageView.setImageDrawable(decodedAnimation);
                         //start it animated, not animatedImageDrawable is a child of Drawable, so casting.
                         ((AnimatedImageDrawable) decodedAnimation).start();
                         //now the second image.
-                        iva2.setImageDrawable(decodedAnimation2);
+                        binding.imageView2.setImageDrawable(decodedAnimation2);
                         ((AnimatedImageDrawable) decodedAnimation2).start();
                     }
                 });

@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import edu.cs4730.animatedgifdemo_kt.databinding.ActivityMainBinding
 import java.io.IOException
 
 
@@ -24,14 +25,12 @@ import java.io.IOException
 class MainActivity : AppCompatActivity() {
     lateinit var decodedAnimation: Drawable
     lateinit var decodedAnimation2: Drawable
-    lateinit var iva: ImageView
-    lateinit var iva2: ImageView
+    lateinit var binding: ActivityMainBinding
     lateinit var colorFilter: ColorFilter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        iva = findViewById(R.id.imageView)
-        iva2 = findViewById(R.id.imageView2)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         //get the animated gif, but can't be on the main thread, so
         Thread {
@@ -59,11 +58,11 @@ class MainActivity : AppCompatActivity() {
             }
             //can't change the imageview from a thread, so add to the main thread via a post.
             runOnUiThread { // set the drawable as image source of ImageView
-                iva.setImageDrawable(decodedAnimation)
+                binding.imageView.setImageDrawable(decodedAnimation)
                 //start it animated, not animatedImageDrawable is a child of Drawable, so casting.
                 (decodedAnimation as AnimatedImageDrawable).start()
                 //now the second image.
-                iva2.setImageDrawable(decodedAnimation2)
+                binding.imageView2.setImageDrawable(decodedAnimation2)
                 (decodedAnimation2 as AnimatedImageDrawable).start()
             }
         }.start()

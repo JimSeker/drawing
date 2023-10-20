@@ -7,15 +7,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import edu.cs4730.surfaceviewdemo.databinding.ActivityMainBinding;
+
 
 public class MainActivity extends AppCompatActivity {
+
+    ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+        binding.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getBaseContext(), AllinOneActivity.class)
@@ -23,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
+        binding.button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getBaseContext(), SeparateActivity.class)
