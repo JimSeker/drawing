@@ -1,5 +1,6 @@
 package edu.cs4730.alieninvaders_kt
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.Log
@@ -289,6 +290,7 @@ class mySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
      * touch event to deal with the left, right, and fire "button"
      *
      */
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val action = event.action
         // Retrieve the new x and y touch positions

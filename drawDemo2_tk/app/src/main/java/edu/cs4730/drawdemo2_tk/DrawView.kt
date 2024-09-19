@@ -1,5 +1,6 @@
 package edu.cs4730.drawdemo2_tk
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -139,6 +140,7 @@ class DrawView : View {
      * overrode this event to get all the touch events for this view.
      *
      */
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val action = event.action
         // Retrieve the new x and y touch positions

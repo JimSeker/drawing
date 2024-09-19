@@ -11,7 +11,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.AnimatedImageDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.widget.ImageView;
 
 import java.io.IOException;
 

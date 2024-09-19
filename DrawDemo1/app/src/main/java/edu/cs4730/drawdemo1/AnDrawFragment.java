@@ -1,6 +1,8 @@
 package edu.cs4730.drawdemo1;
 
 import androidx.annotation.NonNull;
+
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -49,6 +51,7 @@ public class AnDrawFragment extends Fragment {
     //for the thread
     Thread myThread;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

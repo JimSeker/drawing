@@ -1,5 +1,6 @@
 package edu.cs4730.drawdemo2;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -148,6 +149,7 @@ public class DrawView extends View {
      * overrode this event to get all the touch events for this view.
      *
      */
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();

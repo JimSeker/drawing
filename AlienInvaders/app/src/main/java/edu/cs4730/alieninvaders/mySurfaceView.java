@@ -1,5 +1,6 @@
 package edu.cs4730.alieninvaders;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -102,7 +103,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         right = w;
         //approx 80 pixels at the top and bottom.  the bottom is where we have the left/fire/right "buttons"
         float standoff = 80 * scale;
-        float third = w / 3;
+        float third = w / 3f;
         //third of the width.  plus "height" of buttons
         leftbtn = third;
         firebtn = third + third; //less computation in add then multiple by 2.
@@ -265,6 +266,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
      * touch event to deal with the left, right, and fire "button"
      *
      */
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
