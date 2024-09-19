@@ -1,5 +1,6 @@
 package edu.cs4730.flappyalien;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -21,7 +22,7 @@ import java.util.Random;
 
 public class myTextureView extends TextureView implements TextureView.SurfaceTextureListener {
 
-    private Context myContext;
+    private final Context myContext;
     private myThread thread;
     public Paint red, black;
     boolean gameover = true;
@@ -124,6 +125,7 @@ public class myTextureView extends TextureView implements TextureView.SurfaceTex
     }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
