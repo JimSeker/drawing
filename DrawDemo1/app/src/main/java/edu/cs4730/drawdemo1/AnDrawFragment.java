@@ -26,15 +26,20 @@ import android.widget.Spinner;
 
 import androidx.fragment.app.Fragment;
 
+import edu.cs4730.drawdemo1.databinding.FragmentDraw1Binding;
+
 /**
  * This uses an animated clear button, instead of just clearing it.
  */
 public class AnDrawFragment extends Fragment {
-    ImageView theboardfield;
+
+    FragmentDraw1Binding binding;
+
+  //  ImageView theboardfield;
     Bitmap theboard;
     Canvas theboardc;
-    Button btnClear, btnNColor;
-    Spinner mySpinner;
+  //  Button btnClear, btnNColor;
+  //  Spinner mySpinner;
     int which = 1;
     final int boardsize = 480;
     //for drawing
@@ -53,14 +58,14 @@ public class AnDrawFragment extends Fragment {
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View myView = inflater.inflate(R.layout.fragment_andraw, container, false);
+        binding = FragmentDraw1Binding.inflate(inflater, container, false);
 
         //Simple clear button, reset the image to white.
-        btnClear = myView.findViewById(R.id.clear);
-        btnClear.setOnClickListener(new View.OnClickListener() {
+
+        binding.clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startThread();  //done to simply a few things.
@@ -68,8 +73,7 @@ public class AnDrawFragment extends Fragment {
         });
 
         //changes to the next color in the list
-        btnNColor = myView.findViewById(R.id.next);
-        btnNColor.setOnClickListener(new View.OnClickListener() {
+        binding.next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myColorList.next();
@@ -79,16 +83,14 @@ public class AnDrawFragment extends Fragment {
 
         //setup the spinner
         String[] list = {"Point", "Line", "Rect", "Circle", "Arc", "Oval", "Pic", "Text"};
-        //first we will work on the spinner1 (which controls the seekbar)
-        mySpinner = (Spinner) myView.findViewById(R.id.spinner);
         //create the ArrayAdapter of strings from my List.
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, list);
         //set the dropdown layout
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //finally set the adapter to the spinner
-        mySpinner.setAdapter(adapter);
+        binding.spinner.setAdapter(adapter);
         //set the selected listener as well
-        mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        binding.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 which = position;
@@ -105,12 +107,11 @@ public class AnDrawFragment extends Fragment {
 
         //get the imageview and create a bitmap to put in the imageview.
         //also create the canvas to draw on.
-        theboardfield = (ImageView) myView.findViewById(R.id.boardfield);
         theboard = Bitmap.createBitmap(boardsize, boardsize, Bitmap.Config.ARGB_8888);
         theboardc = new Canvas(theboard);
         theboardc.drawColor(Color.WHITE);  //background color for the board.
-        theboardfield.setImageBitmap(theboard);
-        theboardfield.setOnTouchListener(new myTouchListener());
+        binding.boardfield.setImageBitmap(theboard);
+        binding.boardfield.setOnTouchListener(new myTouchListener());
 
         //For drawing
 
@@ -128,7 +129,7 @@ public class AnDrawFragment extends Fragment {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 if (msg.what == 0) { //redraw image
-                    if (theboard != null && theboardfield != null) {
+                    if (theboard != null ) {
                         refreshBmp();
                     }
                 }
@@ -136,7 +137,7 @@ public class AnDrawFragment extends Fragment {
         };
         //draw it on the screen.
         //theboardc.drawBitmap(alien, null, new Rect(0, 0, 300, 300), myColor);
-        return myView;
+        return binding.getRoot();
     }
 
     /*
@@ -249,13 +250,13 @@ public class AnDrawFragment extends Fragment {
 
         }
 
-        theboardfield.setImageBitmap(theboard);
-        theboardfield.invalidate();
+        binding.boardfield.setImageBitmap(theboard);
+        binding.boardfield.invalidate();
     }
 
     void refreshBmp() {
-        theboardfield.setImageBitmap(theboard);
-        theboardfield.invalidate();
+        binding.boardfield.setImageBitmap(theboard);
+        binding.boardfield.invalidate();
     }
 
     /* (non-Javadoc)

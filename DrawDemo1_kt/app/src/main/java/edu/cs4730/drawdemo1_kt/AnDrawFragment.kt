@@ -1,41 +1,41 @@
 package edu.cs4730.drawdemo1_kt
 
+import android.annotation.SuppressLint
 import android.graphics.*
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.Log
-import android.view.View.OnTouchListener
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
+import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import edu.cs4730.drawdemo1_kt.databinding.FragmentDraw1Binding
 
 /**
  * This uses an animated clear button, instead of just clearing it.
  *
  */
 class AnDrawFragment : Fragment() {
-    var theboardfield: ImageView? = null
-    var theboard: Bitmap? = null
-    var theboardc: Canvas? = null
-    lateinit var btnClear: Button
-    lateinit var btnNColor: Button
-    lateinit var mySpinner: Spinner
+
+    private lateinit var binding: FragmentDraw1Binding
+    private lateinit var theboard: Bitmap
+    lateinit var theboardc: Canvas
     var which = 1
     val boardsize = 480
 
     //for drawing
-    var firstx = 0f
-    var firsty = 0f
-    var first = true
-    var myRecF = RectF()
-    var myColor: Paint? = null
+    private var firstx = 0f
+    private var firsty: Float = 0f
+    var first: Boolean = true
+    private var myRecF = RectF()
+    var myColor : Paint = Paint() //default black
     var myColorList = ColorList()
-    var alien: Bitmap? = null
+    private var alien: Bitmap? = null
 
     //for the animation.
     var isAnimation = false
@@ -43,38 +43,37 @@ class AnDrawFragment : Fragment() {
 
     //for the thread
     var myThread: Thread? = null
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        val myView = inflater.inflate(R.layout.fragment_andraw, container, false)
+        binding = FragmentDraw1Binding.inflate(inflater, container, false)
 
         //Simple clear button, reset the image to white.
-        btnClear = myView.findViewById<View>(R.id.clear) as Button
-        btnClear.setOnClickListener {
+        binding.clear.setOnClickListener {
             startThread() //done to simply a few things.
         }
 
         //changes to the next color in the list
-        btnNColor = myView.findViewById<View>(R.id.next) as Button
-        btnNColor.setOnClickListener {
+        binding.next.setOnClickListener {
             myColorList.next()
-            myColor!!.color = myColorList.getNum()
+            myColor.color = myColorList.getNum()
         }
 
         //setup the spinner
         val list = arrayOf("Point", "Line", "Rect", "Circle", "Arc", "Oval", "Pic", "Text")
         //first we will work on the spinner1 (which controls the seekbar)
-        mySpinner = myView.findViewById<View>(R.id.spinner) as Spinner
         //create the ArrayAdapter of strings from my List.
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, list)
         //set the dropdown layout
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         //finally set the adapter to the spinner
-        mySpinner.adapter = adapter
+        binding.spinner.adapter = adapter
         //set the selected listener as well
-        mySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View,
@@ -94,20 +93,19 @@ class AnDrawFragment : Fragment() {
 
         //get the imageview and create a bitmap to put in the imageview.
         //also create the canvas to draw on.
-        theboardfield = myView.findViewById<View>(R.id.boardfield) as ImageView
         theboard = Bitmap.createBitmap(boardsize, boardsize, Bitmap.Config.ARGB_8888)
-        theboardc = Canvas(theboard!!)
-        theboardc!!.drawColor(Color.WHITE) //background color for the board.
-        theboardfield!!.setImageBitmap(theboard)
+        theboardc = Canvas(theboard)
+        theboardc.drawColor(Color.WHITE) //background color for the board.
+        binding.boardfield.setImageBitmap(theboard)
         //lint for the record is stupid and there is no issue, it's in the myTouchListener() method.
-        theboardfield!!.setOnTouchListener(myTouchListener())
+        binding.boardfield.setOnTouchListener(myTouchListener())
 
         //For drawing
-        myColor = Paint() //default black
-        myColor!!.color = myColorList.getNum()
-        myColor!!.style = Paint.Style.FILL
-        myColor!!.strokeWidth = 10f
-        myColor!!.textSize = myColor!!.textSize * 4
+        //myColor = Paint() //default black
+        myColor.color = myColorList.getNum()
+        myColor.style = Paint.Style.FILL
+        myColor.strokeWidth = 10f
+        myColor.textSize *= 4
 
         //load a picture and draw it onto the screen.
         alien = BitmapFactory.decodeResource(resources, R.drawable.alien)
@@ -118,15 +116,14 @@ class AnDrawFragment : Fragment() {
         handler = object : Handler(Looper.getMainLooper()) {
             override fun handleMessage(msg: Message) {
                 if (msg.what == 0) { //redraw image
-                    if (theboard != null && theboardfield != null) {
-                        refreshBmp()
-                    }
+
+                    refreshBmp()
                 }
             }
         }
         //draw it on the screen.
         //theboardc.drawBitmap(alien, null, new Rect(0, 0, 300, 300), myColor);
-        return myView
+        return binding.root
     }
 
     /*
@@ -142,10 +139,10 @@ class AnDrawFragment : Fragment() {
             //We just need the x and y position, to draw on the canvas
             //so, retrieve the new x and y touch positions
             if (event.action == MotionEvent.ACTION_UP) { //fake it for tap.
-                drawBmp(event.x , event.y , MotionEvent.ACTION_UP)
+                drawBmp(event.x, event.y, MotionEvent.ACTION_UP)
                 v.performClick()
             } else if (event.action == MotionEvent.ACTION_MOVE) { //fake it for tap.
-                drawBmp(event.x , event.y , MotionEvent.ACTION_MOVE)
+                drawBmp(event.x, event.y, MotionEvent.ACTION_MOVE)
                 return true
             }
             return false
@@ -156,18 +153,20 @@ class AnDrawFragment : Fragment() {
         //"Point", "Line", "Rect", "Circle", "Arc", "Oval", "Pic", "Text"
         when (which) {
             0 -> {
-                theboardc!!.drawColor(Color.WHITE) //background color for the board.
-                theboardc!!.drawPoint(x, y, myColor!!)
+                theboardc.drawColor(Color.WHITE) //background color for the board.
+                theboardc.drawPoint(x, y, myColor)
             }
+
             1 -> if (first) { //store the point for later
                 firstx = x
                 firsty = y
                 first = false
             } else {
-                theboardc!!.drawColor(Color.WHITE) //background color for the board.
-                theboardc!!.drawLine(firstx, firsty, x, y, myColor!!)
+                theboardc.drawColor(Color.WHITE) //background color for the board.
+                theboardc.drawLine(firstx, firsty, x, y, myColor)
                 if (eventcode == MotionEvent.ACTION_UP) first = true
             }
+
             2 -> if (first) { //store the point for later
                 myRecF.top = y
                 myRecF.left = x
@@ -175,14 +174,16 @@ class AnDrawFragment : Fragment() {
             } else {
                 myRecF.bottom = y
                 myRecF.right = x
-                theboardc!!.drawColor(Color.WHITE) //background color for the board.
-                theboardc!!.drawRect(myRecF, myColor!!)
+                theboardc.drawColor(Color.WHITE) //background color for the board.
+                theboardc.drawRect(myRecF, myColor)
                 if (eventcode == MotionEvent.ACTION_UP) first = true
             }
+
             3 -> {
-                theboardc!!.drawColor(Color.WHITE) //background color for the board.
-                theboardc!!.drawCircle(x, y, 20.0f, myColor!!)
+                theboardc.drawColor(Color.WHITE) //background color for the board.
+                theboardc.drawCircle(x, y, 20.0f, myColor)
             }
+
             4 -> if (first) { //store the point for later
                 myRecF.top = y
                 myRecF.left = x
@@ -190,10 +191,11 @@ class AnDrawFragment : Fragment() {
             } else {
                 myRecF.bottom = y
                 myRecF.right = x
-                theboardc!!.drawColor(Color.WHITE) //background color for the board.
-                theboardc!!.drawArc(myRecF, 0.0f, 45.0f, true, myColor!!)
+                theboardc.drawColor(Color.WHITE) //background color for the board.
+                theboardc.drawArc(myRecF, 0.0f, 45.0f, true, myColor)
                 if (eventcode == MotionEvent.ACTION_UP) first = true
             }
+
             5 -> if (first) { //store the point for later
                 myRecF.top = y
                 myRecF.left = x
@@ -201,27 +203,30 @@ class AnDrawFragment : Fragment() {
             } else {
                 myRecF.bottom = y
                 myRecF.right = x
-                theboardc!!.drawColor(Color.WHITE) //background color for the board.
-                theboardc!!.drawOval(myRecF, myColor!!)
+                theboardc.drawColor(Color.WHITE) //background color for the board.
+                theboardc.drawOval(myRecF, myColor)
                 if (eventcode == MotionEvent.ACTION_UP) first = true
             }
+
             6 -> {
-                theboardc!!.drawColor(Color.WHITE) //background color for the board.
-                theboardc!!.drawBitmap(alien!!, x, y, myColor)
+                theboardc.drawColor(Color.WHITE) //background color for the board.
+                theboardc.drawBitmap(alien!!, x, y, myColor)
             }
+
             7 -> {
-                theboardc!!.drawColor(Color.WHITE) //background color for the board.
-                theboardc!!.drawText("Hi there", x, y, myColor!!)
+                theboardc.drawColor(Color.WHITE) //background color for the board.
+                theboardc.drawText("Hi there", x, y, myColor)
             }
+
             else -> Log.v("hi", "NOT working? $which")
         }
-        theboardfield!!.setImageBitmap(theboard)
-        theboardfield!!.invalidate()
+       binding.boardfield.setImageBitmap(theboard)
+        binding.boardfield.invalidate()
     }
 
     fun refreshBmp() {
-        theboardfield!!.setImageBitmap(theboard)
-        theboardfield!!.invalidate()
+        binding.boardfield.setImageBitmap(theboard)
+        binding.boardfield.invalidate()
     }
 
     /* (non-Javadoc)
@@ -248,9 +253,7 @@ class AnDrawFragment : Fragment() {
             }
             myThread = null
         }
-        theboard = null
-        theboardc = null
-        myColor = null
+
         handler = null
         //		super.finish();
     }
@@ -292,7 +295,8 @@ class AnDrawFragment : Fragment() {
 			  theboardc.drawLine(0, x+i, boardsize, x+i, myColor);
 			}
 			x += block;
-			*/theboardc!!.drawLine(0f, x.toFloat(), boardsize.toFloat(), x.toFloat(), myColor!!)
+			*/
+                theboardc.drawLine(0f, x.toFloat(), boardsize.toFloat(), x.toFloat(), myColor)
                 x++
 
                 //send message to redraw
@@ -309,7 +313,7 @@ class AnDrawFragment : Fragment() {
             //now draw white back up the board
             x = boardsize - block
             done = false
-            myColor!!.color = Color.WHITE
+            myColor.color = Color.WHITE
             while (!done) {
                 if (!isAnimation) {
                     return
@@ -317,12 +321,12 @@ class AnDrawFragment : Fragment() {
                 //clear part of the board
                 i = 0
                 while (i <= block) {
-                    theboardc!!.drawLine(
+                    theboardc.drawLine(
                         0f,
                         (x + i).toFloat(),
                         boardsize.toFloat(),
                         (x + i).toFloat(),
-                        myColor!!
+                        myColor
                     )
                     i++
                 }
@@ -339,7 +343,7 @@ class AnDrawFragment : Fragment() {
                 if (x < 0) done = true
             }
             //now draw white back up the board
-            myColor!!.color = myColorList.num
+            myColor.color = myColorList.num
             isAnimation = false
         }
     }
