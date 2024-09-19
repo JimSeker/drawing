@@ -6,14 +6,14 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import edu.cs4730.graphicoverlaydemo_kt.databinding.FragmentMultiBinding
 
 /**
  * A simple [Fragment] subclass.
  */
 class MultiFragment : Fragment() {
-    private lateinit var tv5: TextView
+    private lateinit var binding: FragmentMultiBinding
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
@@ -22,18 +22,18 @@ class MultiFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val myView = inflater.inflate(R.layout.fragment_multi, container, false)
-        tv5 = myView.findViewById<View>(R.id.textView5) as TextView
-        tv5.setOnTouchListener { v, event ->
+        binding = FragmentMultiBinding.inflate(inflater, container, false)
+
+        binding.textView5.setOnTouchListener { v, event ->
             when (event.action) {
-                MotionEvent.ACTION_DOWN -> tv5.text = " Can't draw here!"
+                MotionEvent.ACTION_DOWN -> binding.textView5.text = " Can't draw here!"
                 MotionEvent.ACTION_UP -> {
-                    tv5.text = "Can't draw here!"
+                    binding.textView5.text = "Can't draw here!"
                     v.performClick()
                 }
             }
             false
         }
-        return myView
+        return binding.root
     }
 }

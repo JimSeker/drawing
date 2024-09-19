@@ -1,5 +1,6 @@
 package edu.cs4730.drawdemo1;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -7,7 +8,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -19,17 +22,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import edu.cs4730.drawdemo1.databinding.FragmentDraw1Binding;
+import edu.cs4730.drawdemo1.databinding.FragmentMainBinding;
+
 
 /**
  * Only draws one object to the image at time and ones where two taps are needed, with animate
  * the drawing of the object, until the finger is lifted on the second tap.
  */
 public class Draw1Fragment extends Fragment {
-    ImageView theboardfield;
+    FragmentDraw1Binding binding;
+
+    // ImageView theboardfield;
     Bitmap theboard;
     Canvas theboardc;
-    Button btnClear, btnNColor;
-    Spinner mySpinner;
+
     int which = 1;
     final int boardsize = 480;
     //for drawing
@@ -45,16 +52,18 @@ public class Draw1Fragment extends Fragment {
         // Required empty public constructor
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
-        View myView = inflater.inflate(R.layout.fragment_draw1, container, false);
+        binding = FragmentDraw1Binding.inflate(inflater, container, false);
+
 
         //Simple clear button, reset the image to white.
-        btnClear = myView.findViewById(R.id.clear);
-        btnClear.setOnClickListener(new View.OnClickListener() {
+
+        binding.clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 theboardc.drawColor(Color.WHITE);  //background color for the board.
@@ -63,8 +72,8 @@ public class Draw1Fragment extends Fragment {
         });
 
         //changes to the next color in the list
-        btnNColor = myView.findViewById(R.id.next);
-        btnNColor.setOnClickListener(new View.OnClickListener() {
+
+        binding.next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myColorList.next();
@@ -75,15 +84,15 @@ public class Draw1Fragment extends Fragment {
         //setup the spinner
         String[] list = {"Point", "Line", "Rect", "Circle", "Arc", "Oval", "Pic", "Text"};
         //first we will work on the spinner1 (which controls the seekbar)
-        mySpinner = (Spinner) myView.findViewById(R.id.spinner);
+
         //create the ArrayAdapter of strings from my List.
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, list);
         //set the dropdown layout
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //finally set the adapter to the spinner
-        mySpinner.setAdapter(adapter);
+        binding.spinner.setAdapter(adapter);
         //set the selected listener as well
-        mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        binding.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 which = position;
@@ -100,12 +109,12 @@ public class Draw1Fragment extends Fragment {
 
         //get the imageview and create a bitmap to put in the imageview.
         //also create the canvas to draw on.
-        theboardfield = (ImageView) myView.findViewById(R.id.boardfield);
+        //theboardfield = (ImageView) myView.findViewById(R.id.boardfield);
         theboard = Bitmap.createBitmap(boardsize, boardsize, Bitmap.Config.ARGB_8888);
         theboardc = new Canvas(theboard);
         theboardc.drawColor(Color.WHITE);  //background color for the board.
-        theboardfield.setImageBitmap(theboard);
-        theboardfield.setOnTouchListener(new myTouchListener());
+        binding.boardfield.setImageBitmap(theboard);
+        binding.boardfield.setOnTouchListener(new myTouchListener());
 
         //For drawing
 
@@ -119,13 +128,13 @@ public class Draw1Fragment extends Fragment {
         alien = BitmapFactory.decodeResource(getResources(), R.drawable.alien);
         //draw it on the screen.
         //theboardc.drawBitmap(alien, null, new Rect(0, 0, 300, 300), myColor);
-        return myView;
+        return binding.getRoot();
     }
 
     /*
-    * TouchListener will draw a square on the image where "touched".
-    * If doing an animated clear, it will return without doing anything.
-    */
+     * TouchListener will draw a square on the image where "touched".
+     * If doing an animated clear, it will return without doing anything.
+     */
     class myTouchListener implements View.OnTouchListener {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -229,13 +238,13 @@ public class Draw1Fragment extends Fragment {
 
         }
 
-        theboardfield.setImageBitmap(theboard);
-        theboardfield.invalidate();
+        binding.boardfield.setImageBitmap(theboard);
+        binding.boardfield.invalidate();
     }
 
     void refreshBmp() {
-        theboardfield.setImageBitmap(theboard);
-        theboardfield.invalidate();
+        binding.boardfield.setImageBitmap(theboard);
+        binding.boardfield.invalidate();
     }
 
 

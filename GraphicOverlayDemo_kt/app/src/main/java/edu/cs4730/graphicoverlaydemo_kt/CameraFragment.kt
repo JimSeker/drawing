@@ -1,65 +1,88 @@
 package edu.cs4730.graphicoverlaydemo_kt
 
-import android.content.Context
 import android.content.pm.PackageManager
-import android.hardware.camera2.CameraAccessException
-import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import edu.cs4730.graphicoverlaydemo_kt.camera.Camera2Preview
+import edu.cs4730.graphicoverlaydemo_kt.databinding.FragmentCameraBinding
 
 /**
  * This fragment shows the camera and drawing overlay
  */
 class CameraFragment : Fragment() {
-    var mPreview: Camera2Preview? = null
-    var preview: FrameLayout? = null
     var TAG = "CameraFragment"
+
     private val REQUIRED_PERMISSIONS = arrayOf("android.permission.CAMERA")
-    var rpl: ActivityResultLauncher<Array<String>>? = null
+    lateinit var binding: FragmentCameraBinding
+    lateinit var rpl: ActivityResultLauncher<Array<String>>
+    private lateinit var imageCapture: ImageCapture
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        val myView = inflater.inflate(R.layout.fragment_camera, container, false)
-        preview = myView.findViewById<View>(R.id.camera2_preview) as FrameLayout
+        binding = FragmentCameraBinding.inflate(inflater, container, false)
+
         //this allows us to check in the fragment instead of doing it all in the activity.
         rpl = registerForActivityResult<Array<String>, Map<String, Boolean>>(
-            ActivityResultContracts.RequestMultiplePermissions(),
-            ActivityResultCallback<Map<String, Boolean>> { isGranted ->
-                var granted = true
-                isGranted.forEach{ entry ->
-                    if (!entry.value) granted = false
-                }
-                if (granted) setup()
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { isGranted ->
+            var granted = true
+            isGranted.forEach { entry ->
+                if (!entry.value) granted = false
             }
-        )
-        if (!allPermissionsGranted()) rpl!!.launch(REQUIRED_PERMISSIONS) else setup()
-        return myView
+            if (granted) startCamera()
+        }
+        if (!allPermissionsGranted())
+            rpl.launch(REQUIRED_PERMISSIONS)
+        else
+            startCamera()
+        return binding.root
     }
 
-    fun setup() {
-        //we have to pass the camera id that we want to use to the surfaceview
-        val manager = requireActivity().getSystemService(Context.CAMERA_SERVICE) as CameraManager
-        try {
-            val cameraId = manager.cameraIdList[0]
-            mPreview = Camera2Preview(requireContext(), cameraId)
-            preview!!.addView(mPreview)
-        } catch (e: CameraAccessException) {
-            Log.v(TAG, "Failed to get a camera ID!")
-            e.printStackTrace()
-        }
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+
+        cameraProviderFuture.addListener(
+            {
+                try {
+                    val cameraProvider = cameraProviderFuture.get()
+                    val preview = Preview.Builder().build()
+                    preview.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+
+                    imageCapture = ImageCapture.Builder()
+                        .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                        .build()
+
+                    val cameraSelector = CameraSelector.Builder()
+                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                        .build()
+
+                    // Unbind use cases before rebinding
+                    cameraProvider.unbindAll()
+
+                    // Bind use cases to camera
+                    cameraProvider.bindToLifecycle(
+                        requireActivity(), cameraSelector, preview, imageCapture
+                    )
+                } catch (e: Exception) {
+                    Log.e(TAG, "Use case binding failed", e)
+                }
+            }, ContextCompat.getMainExecutor(requireContext())
+        )
     }
+
 
     private fun allPermissionsGranted(): Boolean {
         for (permission in REQUIRED_PERMISSIONS) {

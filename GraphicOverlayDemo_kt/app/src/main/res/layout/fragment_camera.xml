@@ -5,11 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".CameraFragment">
 
-    <FrameLayout
-        android:id="@+id/camera2_preview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1" />
+    <androidx.camera.view.PreviewView
+        android:id="@+id/viewFinder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <edu.cs4730.graphicoverlaydemo_kt.GraphicOverLayDraw
         android:id="@+id/overlay"

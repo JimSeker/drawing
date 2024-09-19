@@ -3,12 +3,15 @@ package edu.cs4730.graphicoverlaydemo;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+import edu.cs4730.graphicoverlaydemo.databinding.FragmentMultiBinding;
 
 
 /**
@@ -16,16 +19,17 @@ import android.widget.TextView;
  */
 public class MultiFragment extends Fragment {
 
-    TextView tv5;
+
+    FragmentMultiBinding binding;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View myView = inflater.inflate(R.layout.fragment_multi, container, false);
-        tv5 = (TextView) myView.findViewById(R.id.textView5);
-        tv5.setOnTouchListener(new View.OnTouchListener() {
+        binding = FragmentMultiBinding.inflate(inflater, container, false);
+
+        binding.textView5.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 int action = event.getAction();
@@ -33,17 +37,17 @@ public class MultiFragment extends Fragment {
 
                 switch (action) {
                     case MotionEvent.ACTION_DOWN:
-                        tv5.setText(" Can't draw here!");
+                        binding.textView5.setText(" Can't draw here!");
                         break;
                     case MotionEvent.ACTION_UP:
-                        tv5.setText("Can't draw here!");
+                        binding.textView5.setText("Can't draw here!");
                         v.performClick();
                         break;
                 }
                 return false;
             }
         });
-        return myView;
+        return binding.getRoot();
     }
 
 }

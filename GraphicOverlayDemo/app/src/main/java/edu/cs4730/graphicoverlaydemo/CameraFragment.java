@@ -1,23 +1,27 @@
 package edu.cs4730.graphicoverlaydemo;
 
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageCapture;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import edu.cs4730.graphicoverlaydemo.camera.Camera2Preview;
+
+import edu.cs4730.graphicoverlaydemo.databinding.FragmentCameraBinding;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+
+import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.Map;
 
@@ -28,8 +32,9 @@ import java.util.Map;
 
 public class CameraFragment extends Fragment {
 
-    Camera2Preview mPreview;
-    FrameLayout preview;
+    FragmentCameraBinding binding;
+
+    private ImageCapture imageCapture;
 
     String TAG = "CameraFragment";
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA"};
@@ -37,12 +42,12 @@ public class CameraFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View myView = inflater.inflate(R.layout.fragment_camera, container, false);
+        binding = FragmentCameraBinding.inflate(inflater, container, false);
 
-        preview = (FrameLayout) myView.findViewById(R.id.camera2_preview);
+
         //this allows us to check in the fragment instead of doing it all in the activity.
         rpl = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
             new ActivityResultCallback<Map<String, Boolean>>() {
@@ -51,30 +56,52 @@ public class CameraFragment extends Fragment {
                     boolean granted = true;
                     for (Map.Entry<String, Boolean> x : isGranted.entrySet())
                         if (!x.getValue()) granted = false;
-                    if (granted) setup();
+                    if (granted) startCamera();
                 }
             }
         );
         if (!allPermissionsGranted())
             rpl.launch(REQUIRED_PERMISSIONS);
         else
-            setup();
-        return myView;
+            startCamera();
+        return binding.getRoot();
     }
 
 
-    public void setup() {
-        //we have to pass the camera id that we want to use to the surfaceview
-        CameraManager manager = (CameraManager) requireActivity().getSystemService(Context.CAMERA_SERVICE);
-        try {
-            String cameraId = manager.getCameraIdList()[0];
-            mPreview = new Camera2Preview(requireContext(), cameraId);
-            preview.addView(mPreview);
+    private void startCamera() {
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext());
 
-        } catch (CameraAccessException e) {
-            Log.v(TAG, "Failed to get a camera ID!");
-            e.printStackTrace();
-        }
+        cameraProviderFuture.addListener(
+            new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+                        Preview preview = (new Preview.Builder()).build();
+                        preview.setSurfaceProvider(binding.viewFinder.getSurfaceProvider());
+
+                        imageCapture = new ImageCapture.Builder()
+                            .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                            .build();
+
+                        CameraSelector cameraSelector = new CameraSelector.Builder()
+                            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                            .build();
+
+                        // Unbind use cases before rebinding
+                        cameraProvider.unbindAll();
+
+                        // Bind use cases to camera
+                        cameraProvider.bindToLifecycle(
+                            requireActivity(), cameraSelector, preview, imageCapture);
+
+
+                    } catch (Exception e) {
+                        Log.e(TAG, "Use case binding failed", e);
+                    }
+                }
+            }, ContextCompat.getMainExecutor(requireContext())
+        );
     }
 
     private boolean allPermissionsGranted() {
