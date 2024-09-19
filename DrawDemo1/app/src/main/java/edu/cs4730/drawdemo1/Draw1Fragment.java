@@ -1,5 +1,6 @@
 package edu.cs4730.drawdemo1;
 
+import androidx.annotation.NonNull;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,12 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Spinner;
+
 
 import edu.cs4730.drawdemo1.databinding.FragmentDraw1Binding;
-import edu.cs4730.drawdemo1.databinding.FragmentMainBinding;
 
 
 /**
@@ -54,7 +52,7 @@ public class Draw1Fragment extends Fragment {
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
