@@ -1,6 +1,9 @@
 package edu.cs4730.drawdemo1;
 
 
+import androidx.annotation.NonNull;
+
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -17,21 +20,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Spinner;
+
+
+import edu.cs4730.drawdemo1.databinding.FragmentAsycdrawBinding;
 
 
 /**
  * This uses a async method to animate the clear.  verses a thread clear in the AnDrawFragment.
+ * Note, yes this class (and this part of example) is Deprecated, I'll leave it until it's removed
  */
 public class AsycDrawFragment extends Fragment {
 
-    ImageView theboardfield;
+    FragmentAsycdrawBinding binding;
     Bitmap theboard;
     Canvas theboardc;
-    Button btnClear, btnNColor;
-    Spinner mySpinner;
+
     int which = 1;
     final int boardsize = 480;
     //for drawing
@@ -48,15 +51,15 @@ public class AsycDrawFragment extends Fragment {
     }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View myView = inflater.inflate(R.layout.fragment_asycdraw, container, false);
+        binding = FragmentAsycdrawBinding.inflate(inflater, container, false);
 
-        //Simple clear button, reset the image to white.
-        btnClear = (Button) myView.findViewById(R.id.clear);
-        btnClear.setOnClickListener(new View.OnClickListener() {
+        //Simple clear button, reset the image to white.;
+        binding.clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isAnimation = true;
@@ -66,8 +69,7 @@ public class AsycDrawFragment extends Fragment {
         });
 
         //changes to the next color in the list
-        btnNColor = (Button) myView.findViewById(R.id.next);
-        btnNColor.setOnClickListener(new View.OnClickListener() {
+        binding.next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myColorList.next();
@@ -78,15 +80,14 @@ public class AsycDrawFragment extends Fragment {
         //setup the spinner
         String[] list = {"Point", "Line", "Rect", "Circle", "Arc", "Oval", "Pic", "Text"};
         //first we will work on the spinner1 (which controls the seekbar)
-        mySpinner = (Spinner) myView.findViewById(R.id.spinner);
         //create the ArrayAdapter of strings from my List.
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, list);
         //set the dropdown layout
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //finally set the adapter to the spinner
-        mySpinner.setAdapter(adapter);
+        binding.spinner.setAdapter(adapter);
         //set the selected listener as well
-        mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        binding.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 which = position;
@@ -103,12 +104,11 @@ public class AsycDrawFragment extends Fragment {
 
         //get the imageview and create a bitmap to put in the imageview.
         //also create the canvas to draw on.
-        theboardfield = (ImageView) myView.findViewById(R.id.boardfield);
         theboard = Bitmap.createBitmap(boardsize, boardsize, Bitmap.Config.ARGB_8888);
         theboardc = new Canvas(theboard);
         theboardc.drawColor(Color.WHITE);  //background color for the board.
-        theboardfield.setImageBitmap(theboard);
-        theboardfield.setOnTouchListener(new myTouchListener());
+        binding.boardfield.setImageBitmap(theboard);
+        binding.boardfield.setOnTouchListener(new myTouchListener());
 
         //For drawing
 
@@ -122,7 +122,7 @@ public class AsycDrawFragment extends Fragment {
         alien = BitmapFactory.decodeResource(getResources(), R.drawable.alien);
         //draw it on the screen.
         //theboardc.drawBitmap(alien, null, new Rect(0, 0, 300, 300), myColor);
-        return myView;
+        return binding.getRoot();
     }
 
     /*
@@ -222,13 +222,13 @@ public class AsycDrawFragment extends Fragment {
 
         }
 
-        theboardfield.setImageBitmap(theboard);
-        theboardfield.invalidate();
+        binding.boardfield.setImageBitmap(theboard);
+        binding.boardfield.invalidate();
     }
 
     void refreshBmp() {
-        theboardfield.setImageBitmap(theboard);
-        theboardfield.invalidate();
+        binding.boardfield.setImageBitmap(theboard);
+        binding.boardfield.invalidate();
     }
 
     /* (non-Javadoc)
@@ -240,6 +240,8 @@ public class AsycDrawFragment extends Fragment {
 
     }
     /*
+    * Note, yes this class (and this part of example) is Deprecated, I'll leave it until it's removed
+    *
     * this is an thread, so it can run the "animated" clear button"
     * So it draws a line with the current color down the image, and then white back up to clear
     *
