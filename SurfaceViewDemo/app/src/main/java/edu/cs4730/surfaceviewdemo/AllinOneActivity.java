@@ -10,6 +10,9 @@ import android.graphics.Rect;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import java.util.Random;
 
@@ -44,6 +48,13 @@ public class AllinOneActivity extends AppCompatActivity implements SurfaceHolder
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_separate);
+        //with android 15, we need the insets otherwise the surface draws over the things it should not.
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         //setup everything needed.
         //load a picture and draw it onto the screen.
@@ -85,8 +96,9 @@ public class AllinOneActivity extends AppCompatActivity implements SurfaceHolder
             }
         });
 
+        LinearLayout myLayout = findViewById(R.id.main);
+        myLayout.addView(mSurfaceView);
 
-        setContentView(mSurfaceView);  //the layout is the surfaceview, no xml or binding is needed.
     }
 
     //simple helper method to draw on the canvas.    (note in a SurfaceView, this is an overridden method.

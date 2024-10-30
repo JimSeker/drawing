@@ -1,8 +1,5 @@
 package edu.cs4730.surfaceviewdemo_kt
 
-import androidx.appcompat.app.AppCompatActivity
-import android.view.SurfaceHolder
-import android.view.SurfaceView
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -12,7 +9,14 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
-import java.util.*
+import android.view.SurfaceHolder
+import android.view.SurfaceView
+import android.view.View
+import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import java.util.Random
 
 /**
  * simple example of a surfaceView with a picture that moves across the screen with a touchlistener.
@@ -37,7 +41,14 @@ class AllinOneActivity : AppCompatActivity(), SurfaceHolder.Callback {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_separate)
 
+        //with android 15, we need the insets otherwise the surface draws over the things it should not.
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v: View, insets: WindowInsetsCompat ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
         //setup everything needed.
         //load a picture and draw it onto the screen.
         alien = BitmapFactory.decodeResource(resources, R.drawable.alien)
@@ -76,7 +87,8 @@ class AllinOneActivity : AppCompatActivity(), SurfaceHolder.Callback {
             }
             true
         }
-        setContentView(mSurfaceView)  //the layout is surfaceview, so binding or xml is needed here.
+        val myLayout = findViewById<LinearLayout>(R.id.main)
+        myLayout.addView(mSurfaceView)
     }
 
     //simple helper method to draw on the canvas.    (note in a SurfaceView, this is an overridden method.

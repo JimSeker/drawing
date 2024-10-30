@@ -3,14 +3,15 @@ package edu.cs4730.animatedgifdemo_kt
 import android.graphics.Color
 import android.graphics.ColorFilter
 import android.graphics.ImageDecoder
-import android.graphics.LightingColorFilter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.AnimatedImageDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.widget.ImageView
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import edu.cs4730.animatedgifdemo_kt.databinding.ActivityMainBinding
 import java.io.IOException
 
@@ -31,14 +32,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v: View, insets: WindowInsetsCompat ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
         //get the animated gif, but can't be on the main thread, so
         Thread {
             try {
-                decodedAnimation =
-                    ImageDecoder.decodeDrawable( // create ImageDecoder.Source object
-                        ImageDecoder.createSource(resources, R.drawable.what)
-                    )
+                decodedAnimation = ImageDecoder.decodeDrawable( // create ImageDecoder.Source object
+                    ImageDecoder.createSource(resources, R.drawable.what)
+                )
                 decodedAnimation2 =
                     ImageDecoder.decodeDrawable( // create ImageDecoder.Source object
                         ImageDecoder.createSource(resources, R.drawable.rainbowkitty)
