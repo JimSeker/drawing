@@ -47,7 +47,7 @@ class AllinOneActivity : AppCompatActivity(), SurfaceHolder.Callback {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v: View, insets: WindowInsetsCompat ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+            WindowInsetsCompat.CONSUMED
         }
         //setup everything needed.
         //load a picture and draw it onto the screen.

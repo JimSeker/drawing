@@ -10,10 +10,14 @@ import android.graphics.SurfaceTexture;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import android.view.Gravity;
 import android.view.TextureView;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 
 /**
@@ -30,9 +34,9 @@ public class AllinOneActivity extends AppCompatActivity implements TextureView.S
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_separate);
         //get a layout, which we will use later.
-        FrameLayout content = new FrameLayout(this);
+        FrameLayout content = findViewById(R.id.main);
 
         //get a TextureView and set it up with all code below
         mTextureView = new TextureView(this);
@@ -42,6 +46,11 @@ public class AllinOneActivity extends AppCompatActivity implements TextureView.S
         //add the TextureView to our layout from above.
         content.addView(mTextureView, new FrameLayout.LayoutParams(500, 500, Gravity.CENTER));
         setContentView(content);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
     }
 
     /**

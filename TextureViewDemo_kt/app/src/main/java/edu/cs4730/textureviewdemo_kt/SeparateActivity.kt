@@ -1,10 +1,11 @@
 package edu.cs4730.textureviewdemo_kt
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import edu.cs4730.textureviewdemo_kt.myTextureView
+import android.view.View
 import android.widget.FrameLayout
-import android.view.Gravity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
 /**
  * This basically new myTextureView, so most of the code in myTextView.java instead of here.
@@ -13,16 +14,19 @@ import android.view.Gravity
 class SeparateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //this will cause the TextureView to fill the screen.
-        setContentView(myTextureView(this))
+        setContentView(R.layout.activity_separate)
+        ViewCompat.setOnApplyWindowInsetsListener(
+            findViewById(R.id.main)
+        ) { v: View, insets: WindowInsetsCompat ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            WindowInsetsCompat.CONSUMED
+        }
 
-        //if you wanted to set the size via a layout, use this code
-        /*
-        val content = FrameLayout(this)
-        val mTextureView = myTextureView(this)
-        mTextureView.isOpaque = false
-        content.addView(mTextureView, FrameLayout.LayoutParams(500, 500, Gravity.CENTER))
-        setContentView(content)
-        */
+        //this will cause the TextureView to fill the screen.
+        val myLayout = findViewById<FrameLayout>(R.id.main)
+        myLayout.addView(myTextureView(this))
+
+
     }
 }

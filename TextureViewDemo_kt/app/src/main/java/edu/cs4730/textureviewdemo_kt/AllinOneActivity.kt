@@ -2,15 +2,17 @@ package edu.cs4730.textureviewdemo_kt
 
 import android.graphics.Color
 import android.graphics.Paint
-import androidx.appcompat.app.AppCompatActivity
-import android.view.TextureView.SurfaceTextureListener
-import android.view.TextureView
-import android.os.Bundle
-import android.widget.FrameLayout
-import android.view.Gravity
-import android.graphics.SurfaceTexture
-import kotlin.jvm.Volatile
 import android.graphics.PorterDuff
+import android.graphics.SurfaceTexture
+import android.os.Bundle
+import android.view.Gravity
+import android.view.TextureView
+import android.view.TextureView.SurfaceTextureListener
+import android.view.View
+import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
 /**
  * original example from  here: http://pastebin.com/J4uDgrZ8  with much thanks.
@@ -23,8 +25,10 @@ class AllinOneActivity : AppCompatActivity(), SurfaceTextureListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setContentView(R.layout.activity_separate)
+
         //get a layout, which we will use later.
-        val content = FrameLayout(this)
+        val content = findViewById<FrameLayout>(R.id.main)
 
         //get a TextureView and set it up with all code below
         mTextureView = TextureView(this)
@@ -34,6 +38,13 @@ class AllinOneActivity : AppCompatActivity(), SurfaceTextureListener {
         //add the TextureView to our layout from above.
         content.addView(mTextureView, FrameLayout.LayoutParams(500, 500, Gravity.CENTER))
         setContentView(content)
+        ViewCompat.setOnApplyWindowInsetsListener(
+            findViewById(R.id.main)
+        ) { v: View, insets: WindowInsetsCompat ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     /**
