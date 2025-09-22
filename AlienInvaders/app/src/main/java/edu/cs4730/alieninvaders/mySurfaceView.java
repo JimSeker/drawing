@@ -85,9 +85,9 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         tofire = false;
         aliens = new Vector<obj>();
         shots = new Vector<obj>();
-        shotmove *= scale;
-        alienmove *= scale;
-        shipmove += scale;
+        shotmove *= (int) scale;
+        alienmove *= (int) scale;
+        shipmove += (int) scale;
 
         //required call to kick start the surfaceView callbacks.
         getHolder().addCallback(this);
