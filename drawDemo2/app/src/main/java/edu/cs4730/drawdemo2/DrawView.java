@@ -1,6 +1,6 @@
 package edu.cs4730.drawdemo2;
 
-import android.annotation.SuppressLint;
+import androidx.annotation.NonNull;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -114,7 +114,7 @@ public class DrawView extends View {
      *
      */
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
         canvas.drawColor(Color.WHITE);
@@ -149,7 +149,6 @@ public class DrawView extends View {
      * overrode this event to get all the touch events for this view.
      *
      */
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
@@ -176,6 +175,18 @@ public class DrawView extends View {
         return true;
     }
 
+    @Override
+    public boolean performClick() {
+        // Calls the super implementation, which generates an AccessibilityEvent
+        // and calls the onClick() listener on the view, if any
+        super.performClick();
+
+        // Add your custom click handling logic here
+        // For example:
+        // Toast.makeText(getContext(), "Image clicked!", Toast.LENGTH_SHORT).show();
+
+        return true;
+    }
     /**
      * using this to get the size of the view.
      * now... I should likely set the height if the

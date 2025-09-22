@@ -1,6 +1,5 @@
 package edu.cs4730.drawdemo2_tk
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -9,6 +8,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import kotlin.math.sqrt
 
 
 /**
@@ -100,7 +100,12 @@ class DrawView : View {
 
     /**
      * (non-Javadoc)
-     * @see android.view.View.onDraw
+     * @see android.view.View#onDraw(android.graphics.Canvas)
+     *
+     * This is one of two methods I overrode.   The onDraw method
+     * is the one that will draw everything for this view.
+     * in this case, an 8x8 grid on the screen.
+     *
      */
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -123,7 +128,7 @@ class DrawView : View {
         for (i in 0 until size) {
             deltaX = myCircles[i]!!.x - x
             deltaY = myCircles[i]!!.y - y
-            distance = Math.sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())
+            distance = sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())
             collided = distance <= myCircles[i]!!.r
             if (collided) {
                 myCircles[i]!!.color = color
@@ -133,14 +138,10 @@ class DrawView : View {
         return false
     }
 
-    /*
-     * (non-Javadoc)
-     * @see android.view.View#onTouchEvent(android.view.MotionEvent)
-     *
+    /**
      * overrode this event to get all the touch events for this view.
      *
      */
-    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val action = event.action
         // Retrieve the new x and y touch positions
@@ -160,7 +161,16 @@ class DrawView : View {
         }
         return true
     }
+    override fun performClick(): Boolean {
+        // Calls the super implementation, which generates an AccessibilityEvent
+        // and calls the onClick() listener on the view, if any
+        super.performClick()
 
+        // Add your custom click handling logic here
+        // For example:
+        // Toast.makeText(getContext(), "Image clicked!", Toast.LENGTH_SHORT).show();
+        return true
+    }
     /**
      * using this to get the size of the view.
      * now... I should likely set the height if the

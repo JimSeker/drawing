@@ -1,5 +1,8 @@
 package edu.cs4730.drawdemo1;
 
+import androidx.annotation.NonNull;
+
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -17,8 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
+
 
 import edu.cs4730.drawdemo1.databinding.FragmentMainBinding;
 
@@ -44,8 +46,9 @@ public class MainFragment extends Fragment {
     Bitmap alien;
 
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentMainBinding.inflate(inflater, container, false);
 
@@ -98,6 +101,7 @@ public class MainFragment extends Fragment {
         theboardc = new Canvas(theboard);
         theboardc.drawColor(Color.WHITE);  //background color for the board.
         binding.boardfield.setImageBitmap(theboard);
+
         binding.boardfield.setOnTouchListener(new myTouchListener());
 
         //For drawing
@@ -120,9 +124,10 @@ public class MainFragment extends Fragment {
      * If doing an animated clear, it will return without doing anything.
      */
     class myTouchListener implements View.OnTouchListener {
+
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-
+            v.performClick();
             //We just need the x and y position, to draw on the canvas
             //so, retrieve the new x and y touch positions
             if (event.getAction() == MotionEvent.ACTION_UP) { //fake it for tap.

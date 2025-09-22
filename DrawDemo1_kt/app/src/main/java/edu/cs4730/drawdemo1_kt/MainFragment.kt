@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
 import edu.cs4730.drawdemo1_kt.databinding.FragmentMainBinding
+import androidx.core.graphics.createBitmap
 
 /**
  * This is a simple example to show how each of the canvas drawing works.
@@ -79,7 +80,7 @@ class MainFragment : Fragment() {
 
         //get the imageview and create a bitmap to put in the imageview.
         //also create the canvas to draw on.
-        theboard = Bitmap.createBitmap(boardsize, boardsize, Bitmap.Config.ARGB_8888)
+        theboard = createBitmap(boardsize, boardsize, Bitmap.Config.ARGB_8888)
         theboardc = Canvas(theboard)
         theboardc.drawColor(Color.WHITE) //background color for the board.
         binding.boardfield.setImageBitmap(theboard)

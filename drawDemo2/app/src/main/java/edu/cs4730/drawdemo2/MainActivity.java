@@ -1,5 +1,6 @@
 package edu.cs4730.drawdemo2;
 
+import androidx.annotation.NonNull;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.reset) {
             binding.dv1.clearmaze();
             return true;
