@@ -15,8 +15,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 /**
- * original example from  here: http://pastebin.com/J4uDgrZ8  with much thanks.
- * Everything for the texture in in the MainActivity.  And a generic textureView is used
+ * original example from  here: http://pastebin.com/J4uDgrZ8  with many thanks.
+ * Everything for the texture in the MainActivity.  And a generic textureView is used
  */
 class AllinOneActivity : AppCompatActivity(), SurfaceTextureListener {
     private lateinit var mTextureView: TextureView
